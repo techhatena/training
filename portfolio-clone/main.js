@@ -110,7 +110,7 @@ const designedProjects = [
   {
     title: "Car Photography",
     description: "Dark cinematic photoshoot",
-    image: "images/designed-img/Photography.jpg",
+    image: "images/designed-img/photography.jpg",
     demo: "#",
     type: "designed",
   },
@@ -182,4 +182,10 @@ window.addEventListener("load", () => {
   if (allButton) {
     allButton.click();
   }
+});
+
+// Phone input validation - only allow numbers
+const phoneInput = document.getElementById("phoneInput");
+phoneInput.addEventListener("input", (e) => {
+  e.target.value = e.target.value.replace(/[^0-9]/g, "");
 });
