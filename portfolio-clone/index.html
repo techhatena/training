@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+    <script defer src="main.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body class="bg-gray-300">
+    <header
+      id="header"
+      class="fixed top-0 left-0 w-full z-50 flex justify-between items-center transition-all duration-300 bg-black md:bg-transparent px-6 lg:px-10 py-4"
+    >
+      <div class="flex items-center">
+        <img
+          id="logo"
+          src="images/logo-white.png"
+          alt="logo"
+          class="w-10 transition-all duration-300"
+        />
+      </div>
+
+      <nav class="hidden md:flex items-center gap-8">
+        <a
+          href="#aboutMe"
+          class="text-white font-semibold hover:text-[#ff4d00] transition-colors duration-300"
+          >ABOUT ME
+        </a>
+        <a
+          href="#skills"
+          class="text-white font-semibold hover:text-[#ff4d00] transition-colors duration-300"
+          >SKILLS
+        </a>
+        <a
+          href="#portfolio"
+          class="text-white font-semibold hover:text-[#ff4d00] transition-colors duration-300"
+          >PORTFOLIO
+        </a>
+        <button
+          class="bg-white text-black font-semibold rounded-2xl px-6 py-2 hover:bg-[#ff4d00] hover:md:text-white duration-500"
+        >
+          <a href="#contact">CONTACT ME</a>
+        </button>
+      </nav>
+
+      <button id="menuBtn" class="md:hidden text-white">
+        <img src="images/menus.png" alt="menu" class="w-7 h-7 cursor-pointer" />
+      </button>
+      <button id="closeBtn" class="md:hidden text-white hidden">
+        <img src="images/cross.png" class="w-7 h-7 cursor-pointer" alt="closeMenu" />
+      </button>
+    </header>
+    <nav
+      id="mobileMenu"
+      class="fixed top-0 left-0 w-full z-40 bg-black transform -translate-y-full transition-transform duration-300 md:hidden overflow-hidden pt-18 cursor-pointer"
+    >
+      <div class="flex flex-col gap-1 border-t border-white">
+        <a
+          href="#aboutMe"
+          class="text-white font-semibold text-center py-4 px-6 hover:bg-white transition-colors duration-300 w-full hover:text-[#ff4d00]"
+          >ABOUT ME
+        </a>
+        <a
+          href="#skills"
+          class="text-white font-semibold text-center py-4 px-6 hover:bg-white transition-colors duration-300 w-full hover:text-[#ff4d00]"
+          >SKILLS
+        </a>
+        <a
+          href="#portfolio"
+          class="text-white font-semibold text-center py-4 px-6 hover:bg-white transition-colors duration-300 w-full hover:text-[#ff4d00]"
+          >PORTFOLIO
+        </a>
+        <a
+          href="#contact"
+          class="text-white font-semibold text-center py-4 px-6 hover:bg-white transition-colors duration-300 w-full hover:text-[#ff4d00] hover:border-t border-black"
+          >CONTACT ME
+        </a>
+      </div>
+    </nav>
+    <section class="relative min-h-screen overflow-hidden">
+      <div class="hidden lg:block min-h-screen relative">
+        <div
+          class="absolute top-0 right-0 h-screen w-[65%] bg-black origin-top-le hidden lg:block"
+          style="clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%)"
+        ></div>
+        <div
+          class="min-h-screen bg-cover bg-center flex items-center hidden lg:flex"
+        >
+          <img
+            src="images/banner.jpg"
+            alt="banner"
+            class="h-screen left-0 w-[45%]"
+          />
+          <div class="max-w-md relative right-140 z-10">
+            <p class="uppercase tracking-widest text-white text-2xl mt-5">
+              Hi, I am
+            </p>
+
+            <h1
+              class="text-5xl text-white font-extrabold leading-tight text-2xl"
+            >
+              Minh Quang
+            </h1>
+
+            <p class="text-white text-2xl mt-5">
+              Front-end Developer / UI Designer
+            </p>
+            <div class="flex mt-5 gap-6">
+              <a
+                href="#"
+                class="w-12 h-12 bg-black hover:bg-white flex items-center justify-center rounded-lg transition-all duration-300 group"
+              >
+                <i
+                  class="fa-brands fa-github text-2xl text-white group-hover:text-black transition-colors duration-300"
+                ></i>
+              </a>
+              <a
+                href="#"
+                class="w-12 h-12 bg-black hover:bg-white flex items-center justify-center rounded-lg transition-all duration-300 group"
+              >
+                <i
+                  class="fa-brands fa-linkedin-in text-2xl text-white group-hover:text-black transition-colors duration-300"
+                ></i>
+              </a>
+              <a
+                href="#"
+                class="w-12 h-12 bg-black hover:bg-white flex items-center justify-center rounded-lg transition-all duration-300 group"
+              >
+                <i
+                  class="fa-solid fa-envelope text-2xl text-white group-hover:text-black transition-colors duration-300"
+                ></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div
+          class="absolute top-0 right-0 h-screen w-[65%] bg-black origin-top-right hidden lg:block"
+          style="clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%)"
+        >
+          <div
+            class="absolute top-2/5 right-1/4 w-96 h-96 rounded-full -translate-y-1/2"
+            style="
+              background: linear-gradient(
+                to top,
+                #ffd27d 0%,
+                #ff9f43 35%,
+                #ff4d00 65%,
+                #3a3158 100%
+              );
+              z-index: 10;
+            "
+          ></div>
+
+          <img
+            src="images/user.png"
+            alt="user"
+            class="absolute top-1/5 right-40 min-h-screen h-[50%] object-cover object-center z-20 hidden lg:block"
+          />
+        </div>
+      </div>
+      <!-- Mobile View: Carousel/Swipe -->
+      <div class="lg:hidden relative h-screen">
+        <div
+          id="mobileSlider"
+          class="lg:hidden flex overflow-x-auto snap-x snap-mandatory scroll-smooth h-screen no-scrollbar cursor-grab active:cursor-grabbing"
+        >
+          <!-- Slide 1 -->
+          <div
+            class="min-w-full h-screen bg-[url('images/banner.jpg')] bg-cover bg-center flex flex-col items-center justify-center relative snap-center"
+          >
+            <div
+              class="relative z-10 flex flex-col items-center justify-center h-full px-6 text-center"
+            >
+              <p class="text-white text-lg tracking-widest mb-3">
+                Hi, my name is
+              </p>
+              <h1 class="text-4xl font-extrabold text-white mb-2">
+                Minh Quang
+              </h1>
+              <p class="text-white text-lg mb-8">I'm a Developer</p>
+              <div class="flex gap-6">
+                <a
+                  href="#"
+                  class="w-12 h-12 bg-white flex items-center justify-center rounded-lg transition-all duration-300 hover:bg-black group"
+                >
+                  <i
+                    class="fa-brands fa-github text-2xl text-black group-hover:text-white transition-colors duration-300"
+                  ></i>
+                </a>
+                <a
+                  href="#"
+                  class="w-12 h-12 bg-white flex items-center justify-center rounded-lg transition-all duration-300 hover:bg-black group"
+                >
+                  <i
+                    class="fa-solid fa-envelope text-2xl text-black group-hover:text-white transition-colors duration-300"
+                  ></i>
+                </a>
+                <a
+                  href="#"
+                  class="w-12 h-12 bg-white flex items-center justify-center rounded-lg transition-all duration-300 hover:bg-black group"
+                >
+                  <i
+                    class="fa-brands fa-linkedin-in text-2xl text-black group-hover:text-white transition-colors duration-300"
+                  ></i>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 2 -->
+          <div
+            class="min-w-full h-screen flex items-center justify-end relative snap-center bg-black overflow-hidden"
+          >
+            <div
+              class="absolute left-1/2 transform -translate-x-1/2 top-1/2 -translate-y-1/2 w-100 h-100 rounded-full"
+              style="
+                background: linear-gradient(
+                  to bottom,
+                  #3a3158 0%,
+                  #ff4d00 35%,
+                  #ff9f43 65%,
+                  #ffd27d 100%
+                );
+                z-index: 10;
+              "
+            ></div>
+            <img
+              src="images/user.png"
+              alt="user"
+              class="absolute left-1/2 top-1/5 transform -translate-x-1/2 h-screen w-[80%] object-cover object-center z-20"
+            />
+
+            <!-- Right side text and icons -->
+            <div
+              class="absolute bottom-0 left-0 right-0 z-30 bg-gradient-to-t from-black to-transparent py-8 px-6"
+            >
+              <div class="text-white text-center mb-4">
+                <p class="text-sm mb-1">Hi, I am</p>
+                <h2 class="text-2xl font-semibold mb-2">Minh Quang</h2>
+                <p class="text-sm">Front-end Developer / UI Designer</p>
+              </div>
+              <div class="flex gap-4 mb-4 justify-center">
+                <a
+                  href="#"
+                  class="w-10 h-10 bg-white hover:bg-[#ff4d00] flex items-center justify-center rounded-lg transition-all duration-300 group"
+                >
+                  <i
+                    class="fa-solid fa-envelope text-lg text-black group-hover:text-white transition-colors duration-300"
+                  ></i>
+                </a>
+                <a
+                  href="#"
+                  class="w-10 h-10 bg-white hover:bg-[#ff4d00] flex items-center justify-center rounded-lg transition-all duration-300 group"
+                >
+                  <i
+                    class="fa-brands fa-github text-lg text-black group-hover:text-white transition-colors duration-300"
+                  ></i>
+                </a>
+                <a
+                  href="#"
+                  class="w-10 h-10 bg-white hover:bg-[#ff4d00] flex items-center justify-center rounded-lg transition-all duration-300 group"
+                >
+                  <i
+                    class="fa-brands fa-linkedin-in text-lg text-black group-hover:text-white transition-colors duration-300"
+                  ></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-40 flex gap-3"
+        >
+          <span class="dot active" data-index="0"></span>
+          <span class="dot" data-index="1"></span>
+        </div>
+      </div>
+      <div class="relative">
+        <div
+          class="bg-black w-full text-white px-16 py-12 flex flex-col items-center justify-center lg:block lg:items-stretch"
+        >
+          <h2
+            class="text-2xl font-semibold tracking-widest mb-4 text-center lg:text-left"
+          >
+            IT BERRIES
+          </h2>
+          <p class="text-sm leading-relaxed mb-6 text-justify lg:text-left">
+            Nulla in velit a metus rhoncus tempus. Nulla congue nulla vel sem
+            varius finibus. Sed ornare sit amet lorem sed viverra. In vel urna
+            quis libero viverra facilisis ut ac est. Morbi commodo, eros in
+            dignissim tempus, lacus odio rutrum augue, in semper sem magna quis
+            tellus. Etiam enim erat, suscipit eu semper a, dictum sit amet elit.
+            Nunc egestas nisi eget enim gravida facilisis. Pellentesque laoreet
+            varius turpis vel pharetra. Ut ante justo, consequat vitae elementum
+            tempor, accumsan nec eros.
+          </p>
+          <a
+            href="#"
+            class="inline-block text-sm font-semibold p-3 border-r border-l border-white hover:text-[#ff4d00] hover:bg-white transition-colors duration-300"
+            >READ MORE</a
+          >
+        </div>
+      </div>
+    </section>
+    <section
+      id="aboutMe"
+      class="scroll-mt-28 relative bg-gray-300 overflow-hidden"
+    >
+      <div class="flex flex-col justify-center items-center mt-8 px-4 md:px-0">
+        <button
+          class="border-3 border-black p-3 tracking-widest border font-semibold w-40 hover:bg-[#ff4d00] hover:text-white transition-all duration-300"
+        >
+          ABOUT ME
+        </button>
+        <p class="max-w-2xl text-center mt-10 text-sm md:text-base">
+          Nulla in velit a metus rhoncus tempus. Nulla congue nulla vel sem
+          varius finibus. Sed ornare sit amet lorem sed viverra.
+        </p>
+        <button
+          class="font-semibold border-r-2 border-l-2 border-black m-5 h-10 w-30 hover:bg-black hover:text-white"
+        >
+          EXPORT
+        </button>
+        <div class="w-40 h-0.5 bg-black mt-10 mx-auto"></div>
+      </div>
+      <div class="flex flex-col items-center px-4 md:px-6 py-12">
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 max-w-5xl w-full mb-12"
+        >
+          <div class="flex gap-4 md:gap-6">
+            <div class="relative flex-shrink-0">
+              <img
+                src="images/icon-design.png"
+                class="w-16 md:w-24 h-16 md:h-24 opacity-40"
+                alt="icon-design"
+              />
+            </div>
+            <div class="flex flex-col justify-start min-w-0">
+              <h3 class="text-lg md:text-xl font-bold mb-2">DESIGN</h3>
+              <p class="text-xs md:text-sm text-gray-700 leading-relaxed">
+                Design sites based on your needs. Create from scratch with your
+                consultation.
+              </p>
+            </div>
+          </div>
+
+          <!-- Development Card -->
+          <div class="flex gap-4 md:gap-6">
+            <div class="relative flex-shrink-0">
+              <img
+                src="images/icon-dev.png"
+                class="w-16 md:w-24 h-16 md:h-24 opacity-40"
+                alt="icon-development"
+              />
+            </div>
+            <div class="flex flex-col justify-start min-w-0">
+              <h3 class="text-lg md:text-xl font-bold mb-2">DEVELOPMENT</h3>
+              <p class="text-xs md:text-sm text-gray-700 leading-relaxed">
+                Develop sites based on your needs. Create from scratch with your
+                consultation.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Row: Maintenance (Centered) -->
+        <div class="max-w-lg w-full flex gap-4 md:gap-6">
+          <div class="relative flex-shrink-0">
+            <img
+              src="images/icon-maintenance.png"
+              class="w-16 md:w-24 h-16 md:h-24 opacity-40"
+              alt="icon-maintenance"
+            />
+          </div>
+          <div class="flex flex-col justify-start min-w-0">
+            <h3 class="text-lg md:text-xl font-bold mb-2">MAINTENANCE</h3>
+            <p class="text-xs md:text-sm text-gray-700 leading-relaxed">
+              Maintain and update your sites. Support with your continuous
+              feedback.
+            </p>
+          </div>
+        </div>
+        <div class="w-40 h-0.5 bg-black mt-10"></div>
+      </div>
+    </section>
+    <section
+      id="skills"
+      class="scroll-mt-28 relative bg-gray-300 overflow-hidden mb-20"
+    >
+      <div class="flex flex-col items-center mt-8">
+        <button
+          class="border-3 border-black p-3 tracking-widest border font-semibold w-40 hover:bg-[#ff4d00] hover:text-white transition-all duration-300"
+        >
+          SKILLS
+        </button>
+      </div>
+
+      <div class="px-6 lg:px-100 mt-12">
+        <div class="text-xl font-bold tracking-widest mb-8">USING NOW:</div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl">
+          <div class="flex flex-col items-center text-center">
+            <img
+              class="mb-3 w-20 h-20"
+              src="images/icon-skills/html.png"
+              alt="html"
+            />
+            <p class="text-sm font-semibold tracking-widest">HTML5</p>
+          </div>
+          <div class="flex flex-col items-center text-center">
+            <img
+              class="mb-3 w-20 h-20"
+              src="images/icon-skills/css.png"
+              alt="css"
+            />
+            <p class="text-sm font-semibold tracking-widest">CSS3</p>
+          </div>
+          <div class="flex flex-col items-center text-center">
+            <img
+              class="mb-3 w-20 h-20"
+              src="images/icon-skills/sass.png"
+              alt="sass"
+            />
+            <p class="text-sm font-semibold tracking-widest">SASS</p>
+          </div>
+          <div class="flex flex-col items-center text-center">
+            <img
+              class="mb-3 w-20 h-20"
+              src="images/icon-skills/js.png"
+              alt="js"
+            />
+            <p class="text-sm font-semibold tracking-widest">JAVASCRIPT</p>
+          </div>
+          <div class="flex flex-col items-center text-center">
+            <img
+              class="mb-3 w-20 h-20"
+              src="images/icon-skills/react.png"
+              alt="react"
+            />
+            <p class="text-sm font-semibold tracking-widest">REACT</p>
+          </div>
+          <div class="flex flex-col items-center text-center">
+            <img
+              class="mb-3 w-20 h-20"
+              src="images/icon-skills/bootstrap.png"
+              alt="bootstrap"
+            />
+            <p class="text-sm font-semibold tracking-widest">BOOTSTRAP</p>
+          </div>
+          <div class="flex flex-col items-center text-center">
+            <img
+              class="mb-3 w-20 h-20"
+              src="images/icon-skills/git.png"
+              alt="git"
+            />
+            <p class="text-sm font-semibold tracking-widest">GIT</p>
+          </div>
+          <div class="flex flex-col items-center text-center">
+            <img
+              class="mb-3 w-15 h-auto"
+              src="images/icon-skills/figma.png"
+              alt="figma"
+            />
+            <p class="text-sm font-semibold tracking-widest">FIGMA</p>
+          </div>
+        </div>
+      </div>
+      <div class="px-6 lg:px-100 mt-12">
+        <div class="text-xl font-bold tracking-widest mb-8">LEARNING:</div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl">
+          <div class="flex flex-col items-center text-center">
+            <img
+              class="mb-3 w-20 h-20"
+              src="images/icon-skills/nodejs.png"
+              alt="nodejs"
+            />
+            <p class="text-sm font-semibold tracking-widest">NODEJS</p>
+          </div>
+          <div class="flex flex-col items-center text-center">
+            <img
+              class="mb-3 w-20 h-20"
+              src="images/icon-skills/mysql.png"
+              alt="mysql"
+            />
+            <p class="text-sm font-semibold tracking-widest">MYSQL</p>
+          </div>
+          <div class="flex flex-col items-center text-center">
+            <img
+              class="mb-3 w-10 h-auto"
+              src="images/icon-skills/mongo.png"
+              alt="mongo"
+            />
+            <p class="text-sm font-semibold tracking-widest">MONGODB</p>
+          </div>
+          <div class="flex flex-col items-center text-center">
+            <img
+              class="mb-3 w-20 h-20"
+              src="images/icon-skills/typescript.png"
+              alt="typescript"
+            />
+            <p class="text-sm font-semibold tracking-widest">TYPESCRIPT</p>
+          </div>
+        </div>
+      </div>
+      <div class="px-6 lg:px-100 mt-12">
+        <div class="text-xl font-bold tracking-widest mb-8">OTHER SKILLS:</div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl">
+          <div class="flex flex-col items-center text-center">
+            <img
+              class="mb-3 w-20 h-20"
+              src="images/icon-skills/eng.png"
+              alt="eng"
+            />
+            <p class="text-sm font-semibold tracking-widest">ANGIELSKI C1/C2</p>
+          </div>
+          <div class="flex flex-col items-center text-center">
+            <img
+              class="mb-3 w-20 h-20"
+              src="images/icon-skills/hiszpanski.png"
+              alt="hiszpanski"
+            />
+            <p class="text-sm font-semibold tracking-widest">
+              HISZPAŃSKI B1/B2
+            </p>
+          </div>
+          <div class="flex flex-col items-center text-center">
+            <img
+              class="mb-3 w-20 h-20"
+              src="images/icon-skills/c+.png"
+              alt="c+"
+            />
+            <p class="text-sm font-semibold tracking-widest">C+</p>
+          </div>
+          <div class="flex flex-col items-center text-center">
+            <img
+              class="mb-3 w-20 h-20"
+              src="images/icon-skills/c.png"
+              alt="c"
+            />
+            <p class="text-sm font-semibold tracking-widest">C</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="relative py-4 w-full" id="portfolio">
+      <img
+        src="images/portfolio.jpg"
+        alt="img-portfolio"
+        class="object-cover object-[50%_30%] z-0 h-80 border-black border-3 w-full"
+      />
+
+      <div
+        class="absolute top-0 left-0 right-0 h-80 flex items-center justify-center"
+      >
+        <button
+        
+          class="absolute scroll-mt-28 z-10 border-3 border-black p-4 w-40 tracking-widest font-semibold text-lg bg-white hover:bg-[#ff4d00] hover:text-white transition-all duration-300"
+        >
+          PORTFOLIO
+        </button>
+      </div>
+      <div class="w-full bg-black text-white">
+        <div
+          class="flex justify-center gap-10 py-5 text-sm uppercase tracking-widest relative"
+        >
+          <button
+            class="filter-btn text-gray-400 w-1/10 z-20 hover:text-white pb-2 border-b-2 border-transparent hover:border-white cursor-pointer transition-all duration-300 relative"
+            data-filter="all"
+          >
+            ALL
+          </button>
+          <button
+            class="filter-btn text-gray-400 w-1/10 z-20 hover:text-white pb-2 border-b-2 border-transparent hover:border-white cursor-pointer transition-all duration-300"
+            data-filter="coded"
+          >
+            CODED
+          </button>
+          <button
+            class="filter-btn text-gray-400 z-20 hover:text-white pb-2 border-b-2 w-1/10 border-transparent hover:border-white cursor-pointer transition-all duration-300"
+            data-filter="designed"
+          >
+            DESIGNED
+          </button>
+          <div
+            class="absolute top-12 z-0 left-0 right-0 border-b-2 border-gray-600"
+          ></div>
+        </div>
+
+        <div
+          id="projectGrid"
+          class="grid grid-cols-1 md:grid-cols-3 gap-6 px-10 py-10 md:px-20"
+        ></div>
+
+        <p
+          class="text-center py-8 font-semibold text-lg text-gray-400 text-white"
+        >
+          Any many more to come!
+        </p>
+      </div>
+    </section>
+    <section
+    id="contact"
+      class="scroll-mt-28 relative justify-center bg-gray-300 items-center"
+    >
+      <div class="flex flex-col justify-center items-center mt-8 px-4 md:px-0">
+        <button
+          class="border-3 border-black p-3 tracking-widest border font-semibold w-40 hover:bg-[#ff4d00] hover:text-white transition-all duration-300"
+        >
+          CONTACT
+        </button>
+        <p class="max-w-2xl text-center mt-10 text-sm md:text-base">
+          Nulla in velit a metus rhoncus tempus. Nulla congue nulla vel sem
+          varius finibus. Sed ornare sit amet lorem sed viverra. In vel urna
+          quis libero viverra facilisis ut ac est.
+        </p>
+        <div class="w-40 h-0.5 bg-black mt-10 mx-auto"></div>
+        <div class="flex flex-col text-gray-700 gap gap-5 text-sm mt-30">
+          <input
+            type="text"
+            placeholder="ENTER YOUR NAME*"
+            class="border-b-4 border-l-4 p-5 border-black w-sm md:w-xl mb-10"
+          />
+          <input
+            type="email"
+            placeholder="ENTER YOUR EMAIL*"
+            class="border-b-4 border-l-4 p-5 border-black w-sm md:w-xl mb-10"
+          />
+          <input
+            type="text"
+            placeholder="PHONE NUMBER"
+            class="border-b-4 border-l-4 p-5 border-black w-sm md:w-xl mb-10"
+          />
+          <textarea
+            placeholder="YOUR MESSAGE*"
+            class="border-b-4 border-l-4 p-5 border-black w-sm md:w-xl mb-10"
+            rows="5"
+          ></textarea>
+        </div>
+        <button
+          class="font-semibold border-r-2 border-l-2 border-black m-5 h-10 w-30 hover:bg-black hover:text-white cursor-pointer"
+        >
+          SUBMIT
+        </button>
+      </div>
+    </section>
+    <footer class="bg-black w-full text-white py-12">
+      <div class="flex flex-col items-center justify-center">
+        <a
+          href="#"
+          class="flex flex-col items-center mb-6 text-white transition-colors duration-300 hover:text-[#ff4d00]"
+        >
+          <i class="fa-solid fa-angles-up text-4xl mb-3"></i>
+
+          <p class="text-sm font-semibold tracking-widest text-center">
+            BACK TO TOP
+          </p>
+        </a>
+
+        <div class="flex gap-6 mb-8">
+          <a
+            href="#"
+            class="w-12 h-12 bg-black border-2 border-white hover:bg-[#ff4d00] flex items-center justify-center rounded-lg transition-all duration-300 group"
+          >
+            <i
+              class="fa-brands fa-facebook text-lg text-white group-hover:text-black"
+            ></i>
+          </a>
+          <a
+            href="#"
+            class="w-12 h-12 bg-black border-2 border-white hover:bg-[#ff4d00] flex items-center justify-center rounded-lg transition-all duration-300 group"
+          >
+            <i
+              class="fa-brands fa-linkedin-in text-lg text-white group-hover:text-black"
+            ></i>
+          </a>
+          <a
+            href="#"
+            class="w-12 h-12 bg-black border-2 border-white hover:bg-[#ff4d00] flex items-center justify-center rounded-lg transition-all duration-300 group"
+          >
+            <i
+              class="fa-brands fa-instagram text-lg text-white group-hover:text-black"
+            ></i>
+          </a>
+          <a
+            href="#"
+            class="w-12 h-12 bg-black border-2 border-white hover:bg-[#ff4d00] flex items-center justify-center rounded-lg transition-all duration-300 group"
+          >
+            <i
+              class="fa-solid fa-envelope text-lg text-white group-hover:text-black"
+            ></i>
+          </a>
+        </div>
+        <p class="text-xs text-gray-400">
+          @2020 Tomasz Gajda All Rights Reserved.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
