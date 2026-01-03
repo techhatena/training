@@ -9,6 +9,7 @@
       defer
       src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
+    <script defer src="config.js"></script>
     <script defer src="main.js"></script>
     <link
       rel="stylesheet"
@@ -632,9 +633,19 @@
           id="contactForm"
           class="flex flex-col text-gray-700 gap-5 text-sm mt-30 w-full px-4 md:px-0 max-w-2xl"
         >
+          <input type="hidden" id="accessKeyInput" name="access_key" />
+          <input
+            type="hidden"
+            name="subject"
+            value="New Contact Form Submission from Portfolio"
+          />
+          <input type="hidden" name="from_name" value="Portfolio Visitor" />
+          <input type="hidden" name="reply_to" value="raydencv25@gmail.com" />
+
           <div class="w-full">
             <input
               id="nameInput"
+              name="name"
               type="text"
               placeholder="ENTER YOUR NAME*"
               class="border-b-4 border-l-4 p-5 border-black w-full mb-10"
@@ -644,6 +655,7 @@
           <div class="w-full">
             <input
               id="emailInput"
+              name="email"
               type="email"
               placeholder="ENTER YOUR EMAIL*"
               class="border-b-4 border-l-4 p-5 border-black w-full mb-10"
@@ -653,6 +665,7 @@
           <div class="w-full">
             <input
               id="phoneInput"
+              name="phone"
               type="tel"
               inputmode="numeric"
               placeholder="PHONE NUMBER"
@@ -662,6 +675,7 @@
           <div class="w-full">
             <textarea
               id="messageInput"
+              name="message"
               placeholder="YOUR MESSAGE*"
               class="border-b-4 border-l-4 p-5 border-black w-full mb-10"
               rows="5"
@@ -670,11 +684,82 @@
           </div>
           <button
             type="submit"
+            id="submitBtn"
             class="font-semibold border-r-2 border-l-2 border-black px-6 py-2 hover:bg-black hover:text-white cursor-pointer transition-all duration-300 self-center mb-10"
           >
             SUBMIT
           </button>
         </form>
+
+        <!-- Notification Box -->
+        <div
+          id="notificationBox"
+          class="hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-2xl p-8 z-50 text-center min-w-80"
+        >
+          <div id="notificationContent">
+            <!-- Spinner Loading -->
+            <div id="loadingSpinner" class="hidden">
+              <div class="flex justify-center mb-4">
+                <div
+                  class="w-12 h-12 border-4 border-gray-300 border-t-[#ff4d00] rounded-full animate-spin"
+                ></div>
+              </div>
+              <p class="text-gray-700 font-semibold">Đang gửi email...</p>
+            </div>
+
+            <!-- Success Message -->
+            <div id="successMessage" class="hidden">
+              <div class="flex justify-center mb-4">
+                <div
+                  class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center"
+                >
+                  <i class="fa-solid fa-check text-green-600 text-xl"></i>
+                </div>
+              </div>
+              <h3 class="text-lg font-bold text-gray-800 mb-2">
+                Gửi thành công!
+              </h3>
+              <p class="text-gray-600 mb-4">
+                Email của bạn đã được gửi. Chúng tôi sẽ liên hệ sớm nhất.
+              </p>
+              <button
+                type="button"
+                onclick="document.getElementById('notificationBox').classList.add('hidden')"
+                class="bg-[#ff4d00] text-white px-6 py-2 rounded-lg font-semibold hover:bg-orange-600 transition"
+              >
+                Đóng
+              </button>
+            </div>
+
+            <!-- Error Message -->
+            <div id="errorMessage" class="hidden">
+              <div class="flex justify-center mb-4">
+                <div
+                  class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center"
+                >
+                  <i class="fa-solid fa-xmark text-red-600 text-xl"></i>
+                </div>
+              </div>
+              <h3 class="text-lg font-bold text-gray-800 mb-2">Gửi thất bại</h3>
+              <p id="errorText" class="text-gray-600 mb-4"></p>
+              <button
+                type="button"
+                onclick="document.getElementById('notificationBox').classList.add('hidden'); document.getElementById('notificationOverlay').classList.add('hidden');"
+                style="background-color: #dc2626; color: white"
+                class="px-6 py-2 rounded-lg font-semibold hover:opacity-90 transition"
+              >
+                Thử lại
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Overlay (dark background) -->
+        <div
+          id="notificationOverlay"
+          class="hidden fixed inset-0 bg-black/50 z-40"
+          onclick="document.getElementById('notificationBox').classList.add('hidden'); document.getElementById('notificationOverlay').classList.add('hidden');"
+        ></div>
       </div>
     </section>
     <footer class="bg-black w-full text-white py-12">

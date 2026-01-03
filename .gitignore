@@ -1,3 +1,10 @@
+# Environment and Configuration Files
+.env
+.env.local
+.env.*.local
+portfolio-clone/config.js
+config.js
+
 # Logs
 logs
 *.log

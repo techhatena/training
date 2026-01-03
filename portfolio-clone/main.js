@@ -189,3 +189,86 @@ const phoneInput = document.getElementById("phoneInput");
 phoneInput.addEventListener("input", (e) => {
   e.target.value = e.target.value.replace(/[^0-9]/g, "");
 });
+
+// Web3Forms submission
+const contactForm = document.getElementById("contactForm");
+const notificationBox = document.getElementById("notificationBox");
+const notificationOverlay = document.getElementById("notificationOverlay");
+const loadingSpinner = document.getElementById("loadingSpinner");
+const successMessage = document.getElementById("successMessage");
+const errorMessage = document.getElementById("errorMessage");
+const submitBtn = document.getElementById("submitBtn");
+
+// Set access key from config
+if (typeof ACCESS_KEY !== "undefined" && ACCESS_KEY.WEB3FORMS_ACCESS_KEY) {
+  const accessKeyInput = document.getElementById("accessKeyInput");
+  if (accessKeyInput) {
+    accessKeyInput.value = ACCESS_KEY.WEB3FORMS_ACCESS_KEY;
+  }
+}
+
+function showNotification(type) {
+  loadingSpinner.classList.add("hidden");
+  successMessage.classList.add("hidden");
+  errorMessage.classList.add("hidden");
+
+  if (type === "loading") {
+    loadingSpinner.classList.remove("hidden");
+  } else if (type === "success") {
+    successMessage.classList.remove("hidden");
+  } else if (type === "error") {
+    errorMessage.classList.remove("hidden");
+  }
+
+  notificationBox.classList.remove("hidden");
+  notificationOverlay.classList.remove("hidden");
+}
+
+if (contactForm) {
+  contactForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    console.log("Form submitted!");
+
+    const formData = new FormData(contactForm);
+    const originalText = submitBtn.textContent;
+
+    showNotification("loading");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Sending...";
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+      console.log("Response from Web3Forms:", data);
+      console.log("Response status:", response.ok, response.status);
+
+      if (response.ok) {
+        console.log("✅ Email sent successfully!");
+        showNotification("success");
+        contactForm.reset();
+
+        // Auto-close notification after 3 seconds
+        setTimeout(() => {
+          notificationBox.classList.add("hidden");
+          notificationOverlay.classList.add("hidden");
+        }, 3000);
+      } else {
+        throw new Error(data.message || "Form submission failed");
+      }
+    } catch (error) {
+      console.error("❌ Error:", error);
+      document.getElementById("errorText").textContent =
+        error.message || "Có lỗi xảy ra. Vui lòng thử lại!";
+      showNotification("error");
+    } finally {
+      submitBtn.textContent = originalText;
+      submitBtn.disabled = false;
+    }
+  });
+} else {
+  console.error("Contact form not found!");
+}
