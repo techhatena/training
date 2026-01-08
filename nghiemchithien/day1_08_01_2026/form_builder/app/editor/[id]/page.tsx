@@ -1,0 +1,203 @@
+'use client';
+
+import { Canvas } from '@/components/editor/Canvas';
+import { LeftSidebar } from '@/components/editor/LeftSidebar';
+import { RightSidebar } from '@/components/editor/RightSidebar';
+import { generateTSX } from '@/lib/exportTSX';
+import { IFormComponent } from '@/models/Form';
+import { ArrowLeft, Download, Save } from 'lucide-react';
+import Link from 'next/link';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+
+interface FormData {
+    _id?: string;
+    name: string;
+    canvasConfig: {
+        width: string;
+        height?: string;
+        backgroundColor: string;
+    };
+    components: IFormComponent[];
+}
+
+export default function EditorPage() {
+    const params = useParams();
+    const router = useRouter();
+    const formId = params.id as string;
+    const isNew = formId === 'new';
+
+    const [formData, setFormData] = useState<FormData>({
+        name: 'Untitled Form',
+        canvasConfig: {
+            width: '800px',
+            height: '600px',
+            backgroundColor: '#ffffff',
+        },
+        components: [],
+    });
+
+    const [activeComponent, setActiveComponent] = useState<string | null>(null);
+    const [loading, setLoading] = useState(!isNew);
+    const [saving, setSaving] = useState(false);
+
+    useEffect(() => {
+        if (!isNew) {
+            fetchForm();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [formId]);
+
+    const fetchForm = async () => {
+        try {
+            const response = await fetch(`/api/forms/${formId}`);
+            const result = await response.json();
+            if (result.success) {
+                // Ensure height exists for backward compatibility
+                const formDataWithDefaults = {
+                    ...result.data,
+                    canvasConfig: {
+                        ...result.data.canvasConfig,
+                        height: result.data.canvasConfig.height || '600px',
+                    },
+                };
+                setFormData(formDataWithDefaults);
+            }
+        } catch (error) {
+            console.error('Error fetching form:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleSave = async () => {
+        setSaving(true);
+
+        // Debug: Log formData to check if height is present
+        console.log('=== Saving Form Data ===');
+        console.log('Full formData:', formData);
+        console.log('canvasConfig:', formData.canvasConfig);
+        console.log('canvasConfig.width:', formData.canvasConfig.width);
+        console.log('canvasConfig.height:', formData.canvasConfig.height);
+        console.log('=======================');
+
+        try {
+            const url = isNew ? '/api/forms' : `/api/forms/${formId}`;
+            const method = isNew ? 'POST' : 'PUT';
+
+            const response = await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData),
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                if (isNew) {
+                    router.push(`/editor/${result.data._id}`);
+                }
+                toast.success('Lưu form thành công!');
+            }
+        } catch (error) {
+            console.error('Error saving form:', error);
+            toast.error('Lưu form thất bại!');
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    const handleExport = () => {
+        const tsxCode = generateTSX(formData);
+        const blob = new Blob([tsxCode], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${formData.name.replace(/\s+/g, '_')}.tsx`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    };
+
+    const updateComponent = (componentId: string, updates: Partial<IFormComponent>) => {
+        setFormData(prev => ({
+            ...prev,
+            components: prev.components.map(comp =>
+                comp.id === componentId ? { ...comp, ...updates } : comp
+            ),
+        }));
+    };
+
+    const deleteComponent = (componentId: string) => {
+        setFormData(prev => ({
+            ...prev,
+            components: prev.components.filter(comp => comp.id !== componentId),
+        }));
+        if (activeComponent === componentId) {
+            setActiveComponent(null);
+        }
+    };
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="h-screen flex flex-col">
+            {/* Header */}
+            <header className="bg-gradient-to-r from-blue-600 to-blue-700 border-b border-blue-800 px-6 py-4 flex items-center justify-between shadow-lg">
+                <div className="flex items-center gap-4">
+                    <Link href="/" className="text-white hover:text-blue-100 transition">
+                        <ArrowLeft size={24} />
+                    </Link>
+                    <input
+                        type="text"
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        className="text-xl font-semibold bg-white/10 text-white placeholder-white/60 border-none outline-none focus:ring-2 focus:ring-white/40 px-4 py-2 rounded-lg backdrop-blur-sm"
+                        placeholder="Tên form..."
+                    />
+                </div>
+                <div className="flex gap-3">
+                    <button
+                        onClick={handleExport}
+                        className="flex items-center gap-2 px-5 py-2.5 text-white bg-white/20 hover:bg-white/30 border border-white/30 rounded-lg transition-all duration-200 backdrop-blur-sm font-medium"
+                    >
+                        <Download size={18} />
+                        Export TSX
+                    </button>
+                    <button
+                        onClick={handleSave}
+                        disabled={saving}
+                        className="flex items-center gap-2 px-6 py-2.5 bg-white text-blue-700 rounded-lg hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-md font-medium"
+                    >
+                        <Save size={18} />
+                        {saving ? 'Đang lưu...' : 'Lưu'}
+                    </button>
+                </div>
+            </header>
+
+            {/* Main Editor */}
+            <div className="flex-1 flex overflow-hidden">
+                <LeftSidebar formData={formData} setFormData={setFormData} />
+                <Canvas
+                    formData={formData}
+                    setFormData={setFormData}
+                    activeComponent={activeComponent}
+                    setActiveComponent={setActiveComponent}
+                    deleteComponent={deleteComponent}
+                />
+                <RightSidebar
+                    formData={formData}
+                    activeComponent={activeComponent}
+                    updateComponent={updateComponent}
+                />
+            </div>
+        </div>
+    );
+}
