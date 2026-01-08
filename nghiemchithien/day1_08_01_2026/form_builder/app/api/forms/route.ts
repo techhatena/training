@@ -22,9 +22,6 @@ export async function POST(request: NextRequest) {
         await dbConnect();
         const body = await request.json();
 
-        console.log('=== API POST Request ===');
-        console.log('body.canvasConfig:', body.canvasConfig);
-        console.log('=======================');
 
         const form = await Form.create({
             name: body.name || 'Untitled Form',
@@ -36,9 +33,6 @@ export async function POST(request: NextRequest) {
             components: body.components || [],
         });
 
-        console.log('=== After Create ===');
-        console.log('Created form.canvasConfig:', form.canvasConfig);
-        console.log('====================');
 
         return NextResponse.json({ success: true, data: form }, { status: 201 });
     } catch (error) {

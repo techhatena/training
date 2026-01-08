@@ -74,13 +74,6 @@ export default function EditorPage() {
     const handleSave = async () => {
         setSaving(true);
 
-        // Debug: Log formData to check if height is present
-        console.log('=== Saving Form Data ===');
-        console.log('Full formData:', formData);
-        console.log('canvasConfig:', formData.canvasConfig);
-        console.log('canvasConfig.width:', formData.canvasConfig.width);
-        console.log('canvasConfig.height:', formData.canvasConfig.height);
-        console.log('=======================');
 
         try {
             const url = isNew ? '/api/forms' : `/api/forms/${formId}`;
@@ -141,8 +134,17 @@ export default function EditorPage() {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center h-screen">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <div className="flex flex-col justify-center items-center h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
+                <div className="relative">
+                    {/* Outer ring */}
+                    <div className="absolute inset-0 rounded-full border-4 border-blue-200 animate-ping opacity-75"></div>
+
+                    {/* Main spinner */}
+                    <div className="relative w-20 h-20 rounded-full border-4 border-blue-100 border-t-blue-600 animate-spin"></div>
+
+                    {/* Inner circle */}
+                    <div className="absolute inset-3 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 opacity-20 animate-pulse"></div>
+                </div>
             </div>
         );
     }

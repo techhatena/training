@@ -38,12 +38,6 @@ export async function PUT(
         await dbConnect();
         const body = await request.json();
 
-        // Debug log
-        console.log('=== API PUT Request ===');
-        console.log('body.canvasConfig:', body.canvasConfig);
-        console.log('body.canvasConfig.height:', body.canvasConfig?.height);
-        console.log('=====================');
-
         const form = await Form.findByIdAndUpdate(
             id,
             {
@@ -53,10 +47,6 @@ export async function PUT(
             },
             { new: true, runValidators: true }
         );
-
-        console.log('=== After Update ===');
-        console.log('Saved form.canvasConfig:', form?.canvasConfig);
-        console.log('====================');
 
         if (!form) {
             return NextResponse.json(
