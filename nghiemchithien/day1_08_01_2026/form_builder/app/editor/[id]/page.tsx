@@ -113,6 +113,19 @@ export default function EditorPage() {
         URL.revokeObjectURL(url);
     };
 
+    const handleExportJson = () => {
+        const jsonData = JSON.stringify(formData, null, 2);
+        const blob = new Blob([jsonData], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${formData.name.replace(/\s+/g, '_')}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    };
+
     const updateComponent = (componentId: string, updates: Partial<IFormComponent>) => {
         setFormData(prev => ({
             ...prev,
@@ -166,6 +179,13 @@ export default function EditorPage() {
                     />
                 </div>
                 <div className="flex gap-3">
+                    <button
+                        onClick={handleExportJson}
+                        className="flex items-center gap-2 px-5 py-2.5 text-white bg-green-600/80 hover:bg-green-600 border border-green-700 rounded-lg transition-all duration-200 backdrop-blur-sm font-medium"
+                    >
+                        <Download size={18} />
+                        Export JSON
+                    </button>
                     <button
                         onClick={handleExport}
                         className="flex items-center gap-2 px-5 py-2.5 text-white bg-white/20 hover:bg-white/30 border border-white/30 rounded-lg transition-all duration-200 backdrop-blur-sm font-medium"
