@@ -92,7 +92,7 @@ export function FormPreview({ formData, onClose }: FormPreviewProps) {
                 backgroundColor: component.styles.backgroundColor || '#ffffff',
                 borderRadius: component.styles.borderRadius || '6px',
                 padding: component.styles.padding || '8px 12px',
-                border: error ? '2px solid #ef4444' : `2px solid ${component.styles.borderColor || '#d1d5db'}`,
+                border: error ? '2px solid #ef4444' : `1px solid #d1d5db`,
                 width: '100%',
                 boxSizing: 'border-box' as const
             }
