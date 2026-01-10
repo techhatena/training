@@ -4,7 +4,8 @@
 import { DEFAULT_COMPONENT_PROPS, DEFAULT_STYLES } from '@/lib/formElements';
 import { IFormComponent } from '@/models/Form';
 import { Trash2 } from 'lucide-react';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
+import toast from 'react-hot-toast';
 import { ComponentRenderer } from './ComponentRenderer';
 
 interface CanvasProps {
@@ -24,10 +25,77 @@ export function Canvas({
 }: CanvasProps) {
     const canvasRef = useRef<HTMLDivElement>(null);
     const dragOffsetRef = useRef({ x: 0, y: 0 });
+    const [isDragging, setIsDragging] = useState(false);
+    const lastToastRef = useRef(0);
+
+    // Grid configuration
+    const GRID_SIZE = 50;
+
+    // Utility functions for grid snapping
+    const snapToGrid = (value: number) => Math.round(value / GRID_SIZE) * GRID_SIZE;
+
+    const checkCollision = (newComponent: IFormComponent, excludeId?: string) => {
+        return formData.components.some((comp: IFormComponent) => {
+            if (comp.id === excludeId) return false;
+
+            const newLeft = newComponent.layout.x;
+            const newRight = newComponent.layout.x + newComponent.layout.w;
+            const newTop = newComponent.layout.y;
+            const newBottom = newComponent.layout.y + newComponent.layout.h;
+
+            const compLeft = comp.layout.x;
+            const compRight = comp.layout.x + comp.layout.w;
+            const compTop = comp.layout.y;
+            const compBottom = comp.layout.y + comp.layout.h;
+
+            return !(newRight <= compLeft || newLeft >= compRight ||
+                newBottom <= compTop || newTop >= compBottom);
+        });
+    };
+
+    const findNearestValidPosition = (component: IFormComponent, excludeId?: string) => {
+        let x = component.layout.x;
+        let y = component.layout.y;
+        x = snapToGrid(x);
+        y = snapToGrid(y);
+
+        const maxAttempts = 100;
+        let attempts = 0;
+
+        while (attempts < maxAttempts) {
+            const testComponent = {
+                ...component,
+                layout: { ...component.layout, x, y }
+            };
+
+            if (!checkCollision(testComponent, excludeId)) {
+                return { x, y };
+            }
+
+            // Try nearby positions
+            if (attempts % 2 === 0) {
+                x += GRID_SIZE;
+            } else {
+                y += GRID_SIZE;
+            }
+
+            // If we go too far right, move to next row
+            if (x > parseInt(formData.canvasConfig.width) - component.layout.w - 20) {
+                x = snapToGrid(component.layout.x);
+                y += GRID_SIZE;
+            }
+
+            attempts++;
+        }
+
+        // Fallback to original snapped position if no valid position found
+        return { x: snapToGrid(component.layout.x), y: snapToGrid(component.layout.y) };
+    };
 
     const handleDrop = (e: React.DragEvent) => {
         e.preventDefault();
         e.stopPropagation();
+        setIsDragging(false);
 
         if (!canvasRef.current) return;
 
@@ -42,18 +110,28 @@ export function Canvas({
                 let x = e.clientX - rect.left - dragOffsetRef.current.x;
                 let y = e.clientY - rect.top - dragOffsetRef.current.y;
 
+                // Snap to grid
+                x = snapToGrid(x);
+                y = snapToGrid(y);
+
                 // Bounds checking - prevent component from going outside canvas
-                const maxX = rect.width - comp.layout.w - 20;
-                const maxY = rect.height - comp.layout.h - 20;
+                const maxX = parseInt(formData.canvasConfig.width) - comp.layout.w - 20;
+                const maxY = parseInt(formData.canvasConfig.height || '600') - comp.layout.h - 20;
                 x = Math.max(0, Math.min(x, maxX));
                 y = Math.max(0, Math.min(y, maxY));
+
+                // Find nearest valid position that doesn't collide
+                const validPosition = findNearestValidPosition(
+                    { ...comp, layout: { ...comp.layout, x, y } },
+                    componentId
+                );
 
                 // Moving existing component
                 setFormData({
                     ...formData,
                     components: formData.components.map((c: IFormComponent) =>
                         c.id === componentId
-                            ? { ...c, layout: { ...c.layout, x, y } }
+                            ? { ...c, layout: { ...c.layout, x: validPosition.x, y: validPosition.y } }
                             : c
                     ),
                 });
@@ -65,16 +143,20 @@ export function Canvas({
         const elementType = e.dataTransfer.getData('elementType');
         if (!elementType) return;
 
-        const defaultWidth = 400;
-        const defaultHeight = 80;
+        const defaultWidth = snapToGrid(400);
+        const defaultHeight = snapToGrid(80);
 
         // For new elements, place at cursor position
         let x = e.clientX - rect.left - defaultWidth / 2;
         let y = e.clientY - rect.top - 20;
 
+        // Snap to grid
+        x = snapToGrid(x);
+        y = snapToGrid(y);
+
         // Bounds checking for new component
-        const maxX = rect.width - defaultWidth - 20;
-        const maxY = rect.height - defaultHeight - 20;
+        const maxX = parseInt(formData.canvasConfig.width) - defaultWidth - 20;
+        const maxY = parseInt(formData.canvasConfig.height || '600') - defaultHeight - 20;
         x = Math.max(0, Math.min(x, maxX));
         y = Math.max(0, Math.min(y, maxY));
 
@@ -86,6 +168,11 @@ export function Canvas({
             styles: { ...DEFAULT_STYLES },
         };
 
+        // Find nearest valid position that doesn't collide
+        const validPosition = findNearestValidPosition(newComponent);
+        newComponent.layout.x = validPosition.x;
+        newComponent.layout.y = validPosition.y;
+
         setFormData({
             ...formData,
             components: [...formData.components, newComponent],
@@ -94,6 +181,14 @@ export function Canvas({
 
     const handleDragOver = (e: React.DragEvent) => {
         e.preventDefault();
+        setIsDragging(true);
+    };
+
+    const handleDragLeave = (e: React.DragEvent) => {
+        // Only hide grid if leaving the canvas completely
+        if (!(e.currentTarget as Element).contains(e.relatedTarget as Node)) {
+            setIsDragging(false);
+        }
     };
 
     const handleComponentClick = (componentId: string) => {
@@ -104,6 +199,7 @@ export function Canvas({
         e.dataTransfer.setData('componentId', component.id);
         e.dataTransfer.effectAllowed = 'move';
         e.stopPropagation();
+        setIsDragging(true);
 
         // Calculate offset from mouse position to component's top-left corner
         const target = e.currentTarget as HTMLElement;
@@ -120,6 +216,7 @@ export function Canvas({
 
     const handleComponentDragEnd = (e: React.DragEvent) => {
         e.stopPropagation();
+        setIsDragging(false);
     };
 
     const handleCanvasClick = (e: React.MouseEvent) => {
@@ -154,35 +251,45 @@ export function Canvas({
 
             // Calculate new dimensions based on resize direction
             if (direction.includes('e')) {
-                newWidth = Math.max(100, startWidth + deltaX);
+                newWidth = Math.max(100, snapToGrid(startWidth + deltaX));
             }
             if (direction.includes('w')) {
-                newWidth = Math.max(100, startWidth - deltaX);
-                newX = startLeft + deltaX;
+                newWidth = Math.max(100, snapToGrid(startWidth - deltaX));
+                newX = snapToGrid(startLeft + deltaX);
             }
             if (direction.includes('s')) {
-                newHeight = Math.max(60, startHeight + deltaY);
+                newHeight = Math.max(60, snapToGrid(startHeight + deltaY));
             }
             if (direction.includes('n')) {
-                newHeight = Math.max(60, startHeight - deltaY);
-                newY = startTop + deltaY;
+                newHeight = Math.max(60, snapToGrid(startHeight - deltaY));
+                newY = snapToGrid(startTop + deltaY);
             }
 
             // Bounds checking - prevent resize beyond canvas boundaries
-            const maxWidth = rect.width - newX - 20;
-            const maxHeight = rect.height - newY - 20;
+            const canvasWidth = parseInt(formData.canvasConfig.width);
+            const canvasHeight = parseInt(formData.canvasConfig.height || '600');
+            const maxWidth = canvasWidth - newX - 20;
+            const maxHeight = canvasHeight - newY - 20;
             newWidth = Math.min(newWidth, maxWidth);
             newHeight = Math.min(newHeight, maxHeight);
 
-            // Update component
-            setFormData({
-                ...formData,
-                components: formData.components.map((c: IFormComponent) =>
-                    c.id === component.id
-                        ? { ...c, layout: { ...c.layout, x: newX, y: newY, w: newWidth, h: newHeight } }
-                        : c
-                ),
-            });
+            // Check for collisions with the new dimensions
+            const resizedComponent = {
+                ...component,
+                layout: { ...component.layout, x: newX, y: newY, w: newWidth, h: newHeight }
+            };
+
+            if (!checkCollision(resizedComponent, component.id)) {
+                // Update component
+                setFormData({
+                    ...formData,
+                    components: formData.components.map((c: IFormComponent) =>
+                        c.id === component.id
+                            ? { ...c, layout: { ...c.layout, x: newX, y: newY, w: newWidth, h: newHeight } }
+                            : c
+                    ),
+                });
+            }
         };
 
         const handleMouseUp = () => {
@@ -210,6 +317,23 @@ export function Canvas({
             const newWidth = Math.max(400, startWidth + deltaX);
             const newHeight = Math.max(400, startHeight + deltaY);
 
+            // Check if any components would be cut off
+            const wouldBeCut = formData.components.some((comp: IFormComponent) => {
+                const compRight = comp.layout.x + comp.layout.w + 20; // Add padding
+                const compBottom = comp.layout.y + comp.layout.h + 20; // Add padding
+                return compRight > newWidth || compBottom > newHeight;
+            });
+
+            if (wouldBeCut) {
+                // Don't resize if it would cut components - debounced toast
+                const now = Date.now();
+                if (now - lastToastRef.current > 1000) { // Only show toast once per second
+                    toast.error('Không thể thu nhỏ canvas vì sẽ cắt ngang các components!');
+                    lastToastRef.current = now;
+                }
+                return;
+            }
+
             setFormData({
                 ...formData,
                 canvasConfig: {
@@ -235,12 +359,21 @@ export function Canvas({
                 ref={canvasRef}
                 onDrop={handleDrop}
                 onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
                 onClick={handleCanvasClick}
                 className="mx-auto bg-white shadow-xl relative rounded-lg border-2 border-dashed border-gray-300 p-4 group/canvas"
                 style={{
                     width: formData.canvasConfig.width,
                     height: formData.canvasConfig.height || '600px',
                     backgroundColor: formData.canvasConfig.backgroundColor,
+                    ...(isDragging && {
+                        backgroundImage: `
+                            linear-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 1px),
+                            linear-gradient(90deg, rgba(0, 0, 0, 0.1) 1px, transparent 1px)
+                        `,
+                        backgroundSize: `${GRID_SIZE}px ${GRID_SIZE}px`,
+                        backgroundPosition: '0 0, 0 0',
+                    })
                 }}
                 data-canvas-bg="true"
             >

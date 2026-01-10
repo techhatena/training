@@ -30,6 +30,8 @@ export interface ComponentProperties {
     placeholder?: string;
     isRequired?: boolean;
     options?: Array<{ label: string; value: string }>;
+    validationPattern?: string;
+    validationMessage?: string;
     // Name field specific
     prefix?: string;
     useCustomerName?: boolean;

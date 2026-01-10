@@ -126,6 +126,34 @@ export function RightSidebar({ formData, activeComponent, updateComponent }: Rig
                         </div>
                     )}
 
+                    {/* Validation Pattern */}
+                    {(component.type === 'email' || component.type === 'password' || component.type === 'phone' ||
+                        component.type === 'text' || component.type === 'textarea' || component.type === 'postal') && (
+                            <>
+                                <div className="mb-3">
+                                    <label className="block text-xs font-medium text-gray-700 mb-1">Validation Pattern (RegEx)</label>
+                                    <input
+                                        type="text"
+                                        value={component.properties.validationPattern || ''}
+                                        onChange={(e) => handlePropertyChange('properties.validationPattern', e.target.value)}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded text-sm bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                        placeholder="^\\d*(?:\\.\\d{0,2})?$"
+                                    />
+                                </div>
+
+                                <div className="mb-3">
+                                    <label className="block text-xs font-medium text-gray-700 mb-1">Validation Error Message</label>
+                                    <textarea
+                                        value={component.properties.validationMessage || ''}
+                                        onChange={(e) => handlePropertyChange('properties.validationMessage', e.target.value)}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded text-sm bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                        placeholder="Please enter a valid value"
+                                        rows={2}
+                                    />
+                                </div>
+                            </>
+                        )}
+
                     {/* Name field specific properties */}
                     {component.type === 'name_field' && (
                         <>

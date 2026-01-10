@@ -5,7 +5,7 @@ import { LeftSidebar } from '@/components/editor/LeftSidebar';
 import { RightSidebar } from '@/components/editor/RightSidebar';
 import { generateTSX } from '@/lib/exportTSX';
 import { IFormComponent } from '@/models/Form';
-import { ArrowLeft, Download, Save } from 'lucide-react';
+import { ArrowLeft, Download, PanelLeft, PanelRight, Save } from 'lucide-react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -41,6 +41,8 @@ export default function EditorPage() {
     const [activeComponent, setActiveComponent] = useState<string | null>(null);
     const [loading, setLoading] = useState(!isNew);
     const [saving, setSaving] = useState(false);
+    const [leftSidebarVisible, setLeftSidebarVisible] = useState(true);
+    const [rightSidebarVisible, setRightSidebarVisible] = useState(true);
 
     useEffect(() => {
         if (!isNew) {
@@ -179,6 +181,28 @@ export default function EditorPage() {
                     />
                 </div>
                 <div className="flex gap-3">
+                    {/* Sidebar Toggle Buttons */}
+                    <button
+                        onClick={() => setLeftSidebarVisible(!leftSidebarVisible)}
+                        className={`flex items-center gap-2 px-3 py-2.5 text-white border rounded-lg transition-all duration-200 backdrop-blur-sm font-medium ${leftSidebarVisible
+                                ? 'bg-white/20 hover:bg-white/30 border-white/30'
+                                : 'bg-gray-600/80 hover:bg-gray-600 border-gray-700'
+                            }`}
+                        title="Toggle Elements Panel"
+                    >
+                        <PanelLeft size={18} />
+                    </button>
+                    <button
+                        onClick={() => setRightSidebarVisible(!rightSidebarVisible)}
+                        className={`flex items-center gap-2 px-3 py-2.5 text-white border rounded-lg transition-all duration-200 backdrop-blur-sm font-medium ${rightSidebarVisible
+                                ? 'bg-white/20 hover:bg-white/30 border-white/30'
+                                : 'bg-gray-600/80 hover:bg-gray-600 border-gray-700'
+                            }`}
+                        title="Toggle Properties Panel"
+                    >
+                        <PanelRight size={18} />
+                    </button>
+
                     <button
                         onClick={handleExportJson}
                         className="flex items-center gap-2 px-5 py-2.5 text-white bg-green-600/80 hover:bg-green-600 border border-green-700 rounded-lg transition-all duration-200 backdrop-blur-sm font-medium"
@@ -206,7 +230,9 @@ export default function EditorPage() {
 
             {/* Main Editor */}
             <div className="flex-1 flex overflow-hidden">
-                <LeftSidebar formData={formData} setFormData={setFormData} />
+                {leftSidebarVisible && (
+                    <LeftSidebar formData={formData} setFormData={setFormData} />
+                )}
                 <Canvas
                     formData={formData}
                     setFormData={setFormData}
@@ -214,11 +240,13 @@ export default function EditorPage() {
                     setActiveComponent={setActiveComponent}
                     deleteComponent={deleteComponent}
                 />
-                <RightSidebar
-                    formData={formData}
-                    activeComponent={activeComponent}
-                    updateComponent={updateComponent}
-                />
+                {rightSidebarVisible && (
+                    <RightSidebar
+                        formData={formData}
+                        activeComponent={activeComponent}
+                        updateComponent={updateComponent}
+                    />
+                )}
             </div>
         </div>
     );

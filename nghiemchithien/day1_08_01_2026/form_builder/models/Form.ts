@@ -8,6 +8,8 @@ export interface IFormComponent {
         placeholder?: string;
         isRequired?: boolean;
         options?: Array<{ label: string; value: string }>;
+        validationPattern?: string;
+        validationMessage?: string;
         // Name field specific
         prefix?: string;
         useCustomerName?: boolean;
@@ -51,6 +53,8 @@ const FormComponentSchema = new Schema({
         placeholder: String,
         isRequired: Boolean,
         options: [{ label: String, value: String }],
+        validationPattern: String,
+        validationMessage: String,
         prefix: String,
         useCustomerName: Boolean,
         fullName: Boolean,
