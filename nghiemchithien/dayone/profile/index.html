@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nghiêm Chí Thiện - Portfolio</title>
+    <link rel="icon" type="image/x-icon"
+        href="https://res.cloudinary.com/dr7iloxoa/image/upload/v1766937382/Gemini_Generated_Image_hqb6iyhqb6iyhqb6_1_xi22xl.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Top Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <ul class="nav-menu">
+                <li><a href="#about">About me</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#portfolio">Portfolio</a></li>
+                <li><a href="#contact" class="contact-btn">CONTACT ME</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Section -->
+    <main class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="left-section">
+                    <div class="logo">NCT</div>
+                    <h1>Xin chào, tôi là</h1>
+                    <h2>Nghiêm Chí Thiện</h2>
+                    <p class="subtitle">Lập trình viên Front-end / Thiết kế UI</p>
+
+                    <div class="social-links">
+                        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=nghiemchithien471@gmail.com"
+                            target="_blank" title="Email"><i class="fas fa-at"></i></a>
+                        <a href="https://github.com/thienper" target="_blank" title="GitHub"><i
+                                class="fab fa-github"></i></a>
+                        <a href="https://www.linkedin.com/in/nghi%C3%AAm-ch%C3%AD-thi%E1%BB%87n-a46853221/"
+                            target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+
+                <div class="right-section">
+                    <nav class="right-nav">
+                        <!-- <ul>
+                        <li><a href="#about">About me</a></li>
+                        <li><a href="#skills">Skills</a></li>
+                        <li><a href="#portfolio">Portfolio</a></li>
+                        <li><a href="#contact" class="contact-btn">CONTACT ME</a></li>
+                    </ul> -->
+                    </nav>
+                    <div class="profile-image">
+                        <img src="https://res.cloudinary.com/dr7iloxoa/image/upload/v1766936751/1758894151410_j5qmhy_1_yx4qce.png"
+                            alt="Nghiêm Chí Thiện">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- IT Berries Section -->
+    <section class="it-berries">
+        <div class="it-berries-content">
+            <h3>IT BERRIES</h3>
+            <p>Tôi là một nhà phát triển web có đam mê với việc tạo ra các giao diện người dùng đẹp và chức năng. Với
+                kinh nghiệm trong thiết kế và lập trình, tôi cam kết mang lại những giải pháp web chất lượng cao cho
+                khách hàng. Tôi luôn tìm kiếm những công nghệ mới nhất và nỗ lực cải thiện kỹ năng của mình mỗi ngày.
+            </p>
+            <div class="more-content" id="moreContent" style="display: none;">
+                <p>Tôi hiện đang thực tập tại HATENA, nơi tôi có cơ hội hợp tác với các nhà phát triển tài năng và
+                    tìm hiểu về các công nghệ tiên tiến. Công việc của tôi không chỉ giới hạn ở việc viết code mà còn
+                    bao gồm việc tối ưu hóa trải nghiệm người dùng và đảm bảo chất lượng sản phẩm.</p>
+            </div>
+            <button class="read-more-btn" id="readMoreBtn" onclick="toggleContent()">READ MORE</button>
+        </div>
+    </section>
+    <!-- About Me Section -->
+    <section class="about-me" id="about">
+        <div class="about-container">
+            <h2 class="about-title">ABOUT ME</h2>
+            <p class="about-text">Tôi là một lập trình viên front-end đam mê với việc xây dựng những ứng dụng web hiện
+                đại. Với sự kết hợp giữa kỹ năng thiết kế và lập trình, tôi luôn cố gắng tạo ra những trải nghiệm tuyệt
+                vời cho người dùng.</p>
+            <button class="explore-btn">EXPLORE</button>
+            <div class="divider">— \\\/// —</div>
+            <div class="services-grid">
+                <div class="service-item">
+                    <h3>DESIGN</h3>
+                    <p>Tôi có thể thiết kế website theo nhu cầu và đề xuất của bạn. Tôi cũng có thể thiết kế website từ
+                        đầu và tư vấn cho bạn trong suốt quá trình.</p>
+                </div>
+                <div class="service-item">
+                    <h3>DEVELOPMENT</h3>
+                    <p>Tôi có thể phát triển website dựa trên những yêu cầu của bạn. Từ front-end đến tích hợp chức
+                        năng, tôi đảm bảo mọi thứ hoạt động hoàn hảo.</p>
+                </div>
+                <div class="service-item">
+                    <h3>MAINTENANCE</h3>
+                    <p>Tôi cung cấp dịch vụ bảo trì và cập nhật website của bạn. Giúp website luôn hoạt động tốt và an
+                        toàn.</p>
+                </div>
+            </div>
+            <div class="divider">— \\\/// —</div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="skills" id="skills">
+        <div class="about-container">
+            <h2 class="skills-title">SKILLS</h2>
+
+            <div class="skills-category">
+                <h3 class="category-title">USING NOW:</h3>
+                <div class="row g-4">
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-6">
+                        <div class="skill-item">
+                            <img src="./image/icon_html.png" alt="HTML5" class="skill-icon">
+                            <p>HTML5</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-6">
+                        <div class="skill-item">
+                            <img src="./image/css3.png" alt="CSS3" class="skill-icon">
+                            <p>CSS3</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-6">
+                        <div class="skill-item">
+                            <img src="./image/sass.png" alt="SASS" class="skill-icon">
+                            <p>SASS</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-6">
+                        <div class="skill-item">
+                            <img src="./image/javascript.png" alt="JAVASCRIPT" class="skill-icon">
+                            <p>JAVASCRIPT</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-6">
+                        <div class="skill-item">
+                            <img src="./image/react.png" alt="REACT" class="skill-icon">
+                            <p>REACT</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-6">
+                        <div class="skill-item">
+                            <img src="./image/bootstrap.png" alt="BOOTSTRAP" class="skill-icon">
+                            <p>BOOTSTRAP</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-6">
+                        <div class="skill-item">
+                            <img src="./image/git.png" alt="GIT" class="skill-icon">
+                            <p>GIT</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-6">
+                        <div class="skill-item">
+                            <img src="./image/figma.png" alt="FIGMA" class="skill-icon">
+                            <p>FIGMA</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skills-category">
+                <h3 class="category-title">LEARNING:</h3>
+                <div class="row g-4">
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-6">
+                        <div class="skill-item">
+                            <img src="./image/nodejs.png" alt="NODEJS" class="skill-icon">
+                            <p>NODEJS</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-6">
+                        <div class="skill-item">
+                            <img src="./image/mysql.png" alt="MySQL" class="skill-icon">
+                            <p>MySQL</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-6">
+                        <div class="skill-item">
+                            <img src="./image/mongodb.png" alt="MONGODB" class="skill-icon">
+                            <p>MONGODB</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-6">
+                        <div class="skill-item">
+                            <img src="./image/typescript.png" alt="TYPESCRIPT" class="skill-icon">
+                            <p>TYPESCRIPT</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skills-category">
+                <h3 class="category-title">OTHER SKILLS:</h3>
+                <div class="row g-4">
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-6">
+                        <div class="skill-item">
+                            <img src="./image/angielski.png" alt="ANGIELSKI" class="skill-icon">
+                            <p>ANGIELSKI<br>C1/C2</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-6">
+                        <div class="skill-item">
+                            <img src="./image/hiszpanski.png" alt="HISZPANSKI" class="skill-icon">
+                            <p>HISZPANSKI<br>B1/B2</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-6">
+                        <div class="skill-item">
+                            <img src="./image/c++.png" alt="C++" class="skill-icon">
+                            <p>C++</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-6">
+                        <div class="skill-item">
+                            <img src="./image/c.png" alt="C" class="skill-icon">
+                            <p>C</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section class="portfolio" id="portfolio">
+        <div class="portfolio-overlay"></div>
+        <div class="portfolio-content">
+            <h2 class="portfolio-title">PORTFOLIO</h2>
+
+            <!-- Filter Tabs -->
+            <div class="portfolio-filters">
+                <button class="filter-btn active" data-filter="all">ALL</button>
+                <button class="filter-btn" data-filter="coded">CODED</button>
+                <button class="filter-btn" data-filter="designed">DESIGNED</button>
+            </div>
+
+            <!-- Portfolio Grid -->
+            <div class="portfolio-grid">
+                <div class="portfolio-item" data-category="coded">
+                    <img src="./image/hinh1.jpg" alt="Portfolio 1">
+                    <div class="portfolio-overlay-item">
+                        <h3>Project 1</h3>
+                        <p>coded</p>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-category="coded">
+                    <img src="./image/hinh2.jpg" alt="Portfolio 2">
+                    <div class="portfolio-overlay-item">
+                        <h3>Project 2</h3>
+                        <p>coded</p>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-category="coded">
+                    <img src="./image/hinh3.jpg" alt="Portfolio 3">
+                    <div class="portfolio-overlay-item">
+                        <h3>Project 3</h3>
+                        <p>coded</p>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-category="coded">
+                    <img src="./image/hinh4.jpg" alt="Portfolio 4">
+                    <div class="portfolio-overlay-item">
+                        <h3>Project 4</h3>
+                        <p>coded</p>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-category="coded">
+                    <img src="./image/hinh5.jpg" alt="Portfolio 5">
+                    <div class="portfolio-overlay-item">
+                        <h3>Project 5</h3>
+                        <p>coded</p>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-category="coded">
+                    <img src="./image/hinh6.jpg" alt="Portfolio 6">
+                    <div class="portfolio-overlay-item">
+                        <h3>Project 6</h3>
+                        <p>coded</p>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-category="designed">
+                    <img src="./image/hinh7.jpg" alt="Portfolio 7">
+                    <div class="portfolio-overlay-item">
+                        <h3>Project 7</h3>
+                        <p>designed</p>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-category="designed">
+                    <img src="./image/hinh8.jpg" alt="Portfolio 8">
+                    <div class="portfolio-overlay-item">
+                        <h3>Project 8</h3>
+                        <p>designed</p>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-category="designed">
+                    <img src="./image/hinh9.jpg" alt="Portfolio 9">
+                    <div class="portfolio-overlay-item">
+                        <h3>Project 9</h3>
+                        <p>designed</p>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-category="designed">
+                    <img src="./image/hinh10.jpg" alt="Portfolio 10">
+                    <div class="portfolio-overlay-item">
+                        <h3>Project 10</h3>
+                        <p>designed</p>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-category="designed">
+                    <img src="./image/hinh11.jpg" alt="Portfolio 11">
+                    <div class="portfolio-overlay-item">
+                        <h3>Project 11</h3>
+                        <p>designed</p>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-category="designed">
+                    <img src="./image/hinh12.jpg" alt="Portfolio 12">
+                    <div class="portfolio-overlay-item">
+                        <h3>Project 12</h3>
+                        <p>designed</p>
+                    </div>
+                </div>
+            </div>
+
+            <p class="portfolio-footer">And many more to come!</p>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="contact-container">
+            <h2 class="contact-title">CONTACT</h2>
+            <p class="contact-text">Nếu bạn có bất kỳ câu hỏi hoặc muốn hợp tác với tôi, vui lòng liên hệ qua form dưới
+                đây. Tôi sẽ phản hồi lại bạn sớm nhất có thể.</p>
+            <div class="divider">— \\\/// —</div>
+
+            <form class="contact-form">
+                <input type="text" placeholder="ENTER YOUR NAME*" required class="form-input">
+                <input type="email" placeholder="ENTER YOUR EMAIL*" required class="form-input">
+                <input type="tel" placeholder="PHONE NUMBER" class="form-input">
+                <textarea placeholder="YOUR MESSAGE*" required rows="6" class="form-textarea"></textarea>
+                <button type="submit" class="submit-btn">SUBMIT</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-to-top" id="scrollToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="footer-container">
+            <a href="#" class="back-to-top">BACK TO TOP</a>
+
+            <div class="footer-social">
+                <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" title="Email"><i class="fas fa-envelope"></i></a>
+            </div>
+
+            <p class="footer-copyright">@2026 Nghiêm Chí Thiện - Bản quyền được bảo lưu.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

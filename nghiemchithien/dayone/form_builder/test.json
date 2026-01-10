@@ -1,0 +1,155 @@
+{
+  "name": "test",
+  "canvasConfig": {
+    "width": "800px",
+    "height": "600px",
+    "backgroundColor": "#ffffff"
+  },
+  "craftState": {
+    "ROOT": {
+      "type": {
+        "resolvedName": "Container"
+      },
+      "isCanvas": true,
+      "props": {
+        "width": "100%",
+        "height": "100%",
+        "backgroundColor": "transparent",
+        "padding": "20px"
+      },
+      "displayName": "Container",
+      "custom": {},
+      "hidden": false,
+      "nodes": [
+        "XErhg0e2gm",
+        "VVg-q5IU0s",
+        "vwYbGZ9uZy",
+        "yckUoj69qW",
+        "O2FKOfDQF3"
+      ],
+      "linkedNodes": {}
+    },
+    "vwYbGZ9uZy": {
+      "type": {
+        "resolvedName": "EmailField"
+      },
+      "isCanvas": false,
+      "props": {
+        "label": "Email",
+        "placeholder": "Enter your email",
+        "isRequired": true,
+        "fontSize": "14px",
+        "color": "#000000",
+        "backgroundColor": "#ffffff",
+        "borderRadius": "4px",
+        "padding": "8px",
+        "columnWidth": "50%",
+        "validationPattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+        "validationMessage": "Please enter a valid email address"
+      },
+      "displayName": "EmailField",
+      "custom": {},
+      "parent": "ROOT",
+      "hidden": false,
+      "nodes": [],
+      "linkedNodes": {}
+    },
+    "XErhg0e2gm": {
+      "type": {
+        "resolvedName": "NameField"
+      },
+      "isCanvas": false,
+      "props": {
+        "label": "Name",
+        "placeholder": "",
+        "isRequired": true,
+        "displayLabel": true,
+        "nameInputMode": "1",
+        "fontSize": "14px",
+        "color": "#000000",
+        "backgroundColor": "#ffffff",
+        "borderRadius": "4px",
+        "padding": "8px",
+        "columnWidth": "33.33%",
+        "validationPattern": "^[a-zA-ZÀ-ỹĂ-ắÂ-ậĐđĨ-ịÔ-ộƠ-ờÚ-ứỲỹ\\s]{2,50}$",
+        "validationMessage": "Tên phải từ 2-50 ký tự và chỉ chứa chữ cái"
+      },
+      "displayName": "NameField",
+      "custom": {},
+      "parent": "ROOT",
+      "hidden": false,
+      "nodes": [],
+      "linkedNodes": {}
+    },
+    "VVg-q5IU0s": {
+      "type": {
+        "resolvedName": "PasswordField"
+      },
+      "isCanvas": false,
+      "props": {
+        "label": "Password",
+        "placeholder": "Enter your password",
+        "isRequired": true,
+        "fontSize": "14px",
+        "color": "#000000",
+        "backgroundColor": "#ffffff",
+        "borderRadius": "4px",
+        "padding": "8px",
+        "columnWidth": "50%",
+        "validationPattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d@$!%*?&]{8,}$",
+        "validationMessage": "Password must be at least 8 characters with uppercase, lowercase, and number"
+      },
+      "displayName": "PasswordField",
+      "custom": {},
+      "parent": "ROOT",
+      "hidden": false,
+      "nodes": [],
+      "linkedNodes": {}
+    },
+    "yckUoj69qW": {
+      "type": {
+        "resolvedName": "CountrySelect"
+      },
+      "isCanvas": false,
+      "props": {
+        "label": "Country",
+        "placeholder": "Select country",
+        "isRequired": false,
+        "fontSize": "14px",
+        "color": "#000000",
+        "backgroundColor": "#ffffff",
+        "borderRadius": "4px",
+        "padding": "8px",
+        "columnWidth": "25%"
+      },
+      "displayName": "CountrySelect",
+      "custom": {},
+      "parent": "ROOT",
+      "hidden": false,
+      "nodes": [],
+      "linkedNodes": {}
+    },
+    "O2FKOfDQF3": {
+      "type": {
+        "resolvedName": "ButtonField"
+      },
+      "isCanvas": false,
+      "props": {
+        "buttonText": "Submit",
+        "buttonType": "submit",
+        "buttonColor": "#3b82f6",
+        "textColor": "#ffffff",
+        "fontSize": "14px",
+        "borderRadius": "4px",
+        "padding": "12px 24px",
+        "columnWidth": "100%"
+      },
+      "displayName": "ButtonField",
+      "custom": {},
+      "parent": "ROOT",
+      "hidden": false,
+      "nodes": [],
+      "linkedNodes": {}
+    }
+  }
+}
