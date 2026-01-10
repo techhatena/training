@@ -6,7 +6,7 @@ import { LeftSidebar } from '@/components/editor/LeftSidebar';
 import { RightSidebar } from '@/components/editor/RightSidebar';
 import { generateTSX } from '@/lib/exportTSX';
 import { IFormComponent } from '@/models/Form';
-import { ArrowLeft, Download, PanelLeft, PanelRight, Save, Eye } from 'lucide-react';
+import { ArrowLeft, Download, Eye, PanelLeft, PanelRight, Save } from 'lucide-react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -187,8 +187,8 @@ export default function EditorPage() {
                     <button
                         onClick={() => setLeftSidebarVisible(!leftSidebarVisible)}
                         className={`flex items-center gap-2 px-3 py-2.5 text-white border rounded-lg transition-all duration-200 backdrop-blur-sm font-medium ${leftSidebarVisible
-                                ? 'bg-white/20 hover:bg-white/30 border-white/30'
-                                : 'bg-gray-600/80 hover:bg-gray-600 border-gray-700'
+                            ? 'bg-white/20 hover:bg-white/30 border-white/30'
+                            : 'bg-gray-600/80 hover:bg-gray-600 border-gray-700'
                             }`}
                         title="Toggle Elements Panel"
                     >
@@ -197,8 +197,8 @@ export default function EditorPage() {
                     <button
                         onClick={() => setRightSidebarVisible(!rightSidebarVisible)}
                         className={`flex items-center gap-2 px-3 py-2.5 text-white border rounded-lg transition-all duration-200 backdrop-blur-sm font-medium ${rightSidebarVisible
-                                ? 'bg-white/20 hover:bg-white/30 border-white/30'
-                                : 'bg-gray-600/80 hover:bg-gray-600 border-gray-700'
+                            ? 'bg-white/20 hover:bg-white/30 border-white/30'
+                            : 'bg-gray-600/80 hover:bg-gray-600 border-gray-700'
                             }`}
                         title="Toggle Properties Panel"
                     >

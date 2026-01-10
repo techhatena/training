@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import { IFormComponent } from '@/models/Form';
 import { getValidationPresetsByType, VALIDATION_PRESETS } from '@/lib/validationPresets';
+import { IFormComponent } from '@/models/Form';
 import { Settings } from "lucide-react";
 interface RightSidebarProps {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -165,14 +165,14 @@ export function RightSidebar({ formData, activeComponent, updateComponent }: Rig
                                             // Find matching preset
                                             const availablePresets = getValidationPresetsByType(component.type);
                                             const currentPattern = component.properties.validationPattern || '';
-                                            
+
                                             if (!currentPattern) return '';
-                                            
+
                                             const matchingPreset = availablePresets.find(presetKey => {
                                                 const preset = VALIDATION_PRESETS[presetKey as keyof typeof VALIDATION_PRESETS];
                                                 return preset.pattern === currentPattern;
                                             });
-                                            
+
                                             return matchingPreset || 'custom';
                                         })()}
                                         onChange={(e) => handleValidationPresetChange(e.target.value)}

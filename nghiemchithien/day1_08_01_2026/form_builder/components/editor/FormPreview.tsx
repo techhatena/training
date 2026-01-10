@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { IFormComponent } from '@/models/Form';
@@ -83,14 +84,15 @@ export function FormPreview({ formData, onClose }: FormPreviewProps) {
             value,
             onChange: (e: any) => handleInputChange(component.id, e.target.value),
             placeholder: component.properties.placeholder || '',
-            className: `px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                error ? 'border-red-500' : 'border-gray-300'
-            }`,
+            className: `outline-none transition-all ${error ? '' : ''
+                }`,
             style: {
-                fontSize: component.styles.fontSize,
-                color: component.styles.color,
-                backgroundColor: component.styles.backgroundColor,
-                borderRadius: component.styles.borderRadius,
+                fontSize: component.styles.fontSize || '14px',
+                color: component.styles.color || '#000000',
+                backgroundColor: component.styles.backgroundColor || '#ffffff',
+                borderRadius: component.styles.borderRadius || '6px',
+                padding: component.styles.padding || '8px 12px',
+                border: error ? '2px solid #ef4444' : `2px solid ${component.styles.borderColor || '#d1d5db'}`,
                 width: '100%',
                 boxSizing: 'border-box' as const
             }
@@ -324,11 +326,29 @@ export function FormPreview({ formData, onClose }: FormPreviewProps) {
                 return (
                     <button
                         type="submit"
-                        className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors w-full h-full"
+                        className="px-6 py-2 rounded-lg transition-colors w-full h-full border-0 outline-none"
                         style={{
-                            fontSize: component.styles.fontSize,
-                            backgroundColor: component.styles.color === '#000000' ? '#3b82f6' : component.styles.color,
-                            borderRadius: component.styles.borderRadius,
+                            fontSize: component.styles.fontSize || '14px',
+                            color: component.styles.color || '#ffffff',
+                            backgroundColor: component.styles.backgroundColor || '#3b82f6',
+                            borderRadius: component.styles.borderRadius || '8px',
+                            padding: component.styles.padding || '8px 24px',
+                            border: 'none',
+                            cursor: 'pointer'
+                        }}
+                        onMouseEnter={(e) => {
+                            const bg = component.styles.backgroundColor || '#3b82f6';
+                            // Darken background on hover
+                            const darkened = bg === '#3b82f6' ? '#2563eb' :
+                                bg.length === 7 && bg.startsWith('#') ?
+                                    '#' + bg.slice(1).split('').map(c => {
+                                        const val = parseInt(c, 16);
+                                        return Math.max(0, val - 1).toString(16);
+                                    }).join('') : bg;
+                            (e.target as HTMLButtonElement).style.backgroundColor = darkened;
+                        }}
+                        onMouseLeave={(e) => {
+                            (e.target as HTMLButtonElement).style.backgroundColor = component.styles.backgroundColor || '#3b82f6';
                         }}
                     >
                         {component.properties.label}
