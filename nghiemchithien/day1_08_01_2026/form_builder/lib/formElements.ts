@@ -33,6 +33,8 @@ export const DEFAULT_COMPONENT_PROPS: Record<string, any> = {
         fullName: false,
         keepSpace: false,
         useCustomerName: false,
+        validationPattern: '^[a-zA-ZÀ-ỹĂ-ắÂ-ậĐđĨ-ịÔ-ộƠ-ờÚ-ứỲỹ\\s]{2,50}$',
+        validationMessage: 'Tên phải từ 2-50 ký tự và chỉ chứa chữ cái',
     },
     email: {
         label: 'Email',

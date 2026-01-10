@@ -2,6 +2,7 @@
 'use client';
 
 import { IFormComponent } from '@/models/Form';
+import { getValidationPresetsByType, VALIDATION_PRESETS } from '@/lib/validationPresets';
 import { Settings } from "lucide-react";
 interface RightSidebarProps {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -42,6 +43,32 @@ export function RightSidebar({ formData, activeComponent, updateComponent }: Rig
             const layoutKey = path.replace('layout.', '');
             updateComponent(component.id, {
                 layout: { ...component.layout, [layoutKey]: Number(value) },
+            });
+        }
+    };
+
+    const handleValidationPresetChange = (presetKey: string) => {
+        if (presetKey === 'custom') {
+            // Keep current custom values
+            return;
+        } else if (presetKey === '') {
+            // Clear validation
+            updateComponent(component.id, {
+                properties: {
+                    ...component.properties,
+                    validationPattern: '',
+                    validationMessage: ''
+                }
+            });
+        } else {
+            // Apply preset
+            const preset = VALIDATION_PRESETS[presetKey as keyof typeof VALIDATION_PRESETS];
+            updateComponent(component.id, {
+                properties: {
+                    ...component.properties,
+                    validationPattern: preset.pattern,
+                    validationMessage: preset.message
+                }
             });
         }
     };
@@ -126,12 +153,46 @@ export function RightSidebar({ formData, activeComponent, updateComponent }: Rig
                         </div>
                     )}
 
-                    {/* Validation Pattern */}
+                    {/* Validation Section */}
                     {(component.type === 'email' || component.type === 'password' || component.type === 'phone' ||
-                        component.type === 'text' || component.type === 'textarea' || component.type === 'postal') && (
+                        component.type === 'text' || component.type === 'textarea' || component.type === 'postal' ||
+                        component.type === 'name_field') && (
                             <>
                                 <div className="mb-3">
-                                    <label className="block text-xs font-medium text-gray-700 mb-1">Validation Pattern (RegEx)</label>
+                                    <label className="block text-xs font-medium text-gray-700 mb-1">Validation Preset</label>
+                                    <select
+                                        value={(() => {
+                                            // Find matching preset
+                                            const availablePresets = getValidationPresetsByType(component.type);
+                                            const currentPattern = component.properties.validationPattern || '';
+                                            
+                                            if (!currentPattern) return '';
+                                            
+                                            const matchingPreset = availablePresets.find(presetKey => {
+                                                const preset = VALIDATION_PRESETS[presetKey as keyof typeof VALIDATION_PRESETS];
+                                                return preset.pattern === currentPattern;
+                                            });
+                                            
+                                            return matchingPreset || 'custom';
+                                        })()}
+                                        onChange={(e) => handleValidationPresetChange(e.target.value)}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded text-sm bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                    >
+                                        <option value="">Không validation</option>
+                                        {getValidationPresetsByType(component.type).map(presetKey => {
+                                            const preset = VALIDATION_PRESETS[presetKey as keyof typeof VALIDATION_PRESETS];
+                                            return (
+                                                <option key={presetKey} value={presetKey}>
+                                                    {preset.label}
+                                                </option>
+                                            );
+                                        })}
+                                        <option value="custom">Tùy chỉnh...</option>
+                                    </select>
+                                </div>
+
+                                <div className="mb-3">
+                                    <label className="block text-xs font-medium text-gray-700 mb-1">Custom Validation Pattern (RegEx)</label>
                                     <input
                                         type="text"
                                         value={component.properties.validationPattern || ''}
@@ -139,6 +200,7 @@ export function RightSidebar({ formData, activeComponent, updateComponent }: Rig
                                         className="w-full px-3 py-2 border border-gray-300 rounded text-sm bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                         placeholder="^\\d*(?:\\.\\d{0,2})?$"
                                     />
+                                    <p className="text-xs text-gray-500 mt-1">Để trống để sử dụng preset hoặc nhập regex tùy chỉnh</p>
                                 </div>
 
                                 <div className="mb-3">
@@ -147,7 +209,7 @@ export function RightSidebar({ formData, activeComponent, updateComponent }: Rig
                                         value={component.properties.validationMessage || ''}
                                         onChange={(e) => handlePropertyChange('properties.validationMessage', e.target.value)}
                                         className="w-full px-3 py-2 border border-gray-300 rounded text-sm bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                        placeholder="Please enter a valid value"
+                                        placeholder="Thông báo lỗi khi validation thất bại"
                                         rows={2}
                                     />
                                 </div>

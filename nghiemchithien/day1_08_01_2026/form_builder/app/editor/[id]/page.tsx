@@ -1,11 +1,12 @@
 'use client';
 
 import { Canvas } from '@/components/editor/Canvas';
+import { FormPreview } from '@/components/editor/FormPreview';
 import { LeftSidebar } from '@/components/editor/LeftSidebar';
 import { RightSidebar } from '@/components/editor/RightSidebar';
 import { generateTSX } from '@/lib/exportTSX';
 import { IFormComponent } from '@/models/Form';
-import { ArrowLeft, Download, PanelLeft, PanelRight, Save } from 'lucide-react';
+import { ArrowLeft, Download, PanelLeft, PanelRight, Save, Eye } from 'lucide-react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -43,6 +44,7 @@ export default function EditorPage() {
     const [saving, setSaving] = useState(false);
     const [leftSidebarVisible, setLeftSidebarVisible] = useState(true);
     const [rightSidebarVisible, setRightSidebarVisible] = useState(true);
+    const [showPreview, setShowPreview] = useState(false);
 
     useEffect(() => {
         if (!isNew) {
@@ -204,6 +206,14 @@ export default function EditorPage() {
                     </button>
 
                     <button
+                        onClick={() => setShowPreview(true)}
+                        className="flex items-center gap-2 px-5 py-2.5 text-white bg-purple-600/80 hover:bg-purple-600 border border-purple-700 rounded-lg transition-all duration-200 backdrop-blur-sm font-medium"
+                    >
+                        <Eye size={18} />
+                        Preview
+                    </button>
+
+                    <button
                         onClick={handleExportJson}
                         className="flex items-center gap-2 px-5 py-2.5 text-white bg-green-600/80 hover:bg-green-600 border border-green-700 rounded-lg transition-all duration-200 backdrop-blur-sm font-medium"
                     >
@@ -248,6 +258,14 @@ export default function EditorPage() {
                     />
                 )}
             </div>
+
+            {/* Form Preview Modal */}
+            {showPreview && (
+                <FormPreview
+                    formData={formData}
+                    onClose={() => setShowPreview(false)}
+                />
+            )}
         </div>
     );
 }
