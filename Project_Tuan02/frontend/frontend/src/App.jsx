@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import "./App.css";
+import "./App.css"; // File CSS trang trí giao diện
 
 function App() {
-  // 1. Tạo State để lưu trữ dữ liệu người dùng nhập
+  // Lưu dữ liệu người dùng đang nhập vào Form
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -11,9 +11,31 @@ function App() {
     description: "",
   });
 
-  const [message, setMessage] = useState(""); // Lưu thông báo thành công/thất bại
+  // Lưu danh sách contact lấy từ Database về để hiển thị ra bảng
+  const [contactList, setContactList] = useState([]);
 
-  // Hàm xử lý khi người dùng gõ phím
+  // Lưu thông báo (Thành công/Thất bại)
+  const [message, setMessage] = useState("");
+
+  // LẤY DỮ LIỆU TỪ BACKEND
+  const fetchContacts = async () => {
+    try {
+      // Gọi API GET của Backend (đang chạy ở port 5000)
+      const response = await axios.get("http://localhost:5000/api/contact");
+      // Backend trả về mảng dữ liệu -> Lưu vào state để React vẽ lại bảng
+      setContactList(response.data);
+    } catch (error) {
+      console.error("Lỗi lấy dữ liệu:", error);
+    }
+  };
+
+  // USE EFFECT: CHẠY KHI VỪA MỞ WEB
+  // Giúp tự động gọi hàm lấy dữ liệu ngay khi tải trang.
+  useEffect(() => {
+    fetchContacts();
+  }, []);
+
+  // XỬ LÝ KHI GÕ PHÍM (Two-way binding)
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -22,93 +44,117 @@ function App() {
     });
   };
 
-  // Hàm xử lý khi bấm nút Gửi (Submit)
+  // XỬ LÝ KHI BẤM NÚT GỬI
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Ngăn trình duyệt load lại trang
+    e.preventDefault(); // Ngăn trình duyệt tải lại trang
 
-    // 2. Validate dữ liệu cơ bản ở Frontend
+    // Validate: Kiểm tra xem có bỏ trống không
     if (!formData.fullName || !formData.email || !formData.phone) {
-      setMessage("Vui lòng điền đầy đủ thông tin bắt buộc!");
+      setMessage("⚠️ Vui lòng điền đầy đủ thông tin bắt buộc!");
       return;
     }
 
     try {
-      // 3. Gọi API sang Backend (đang chạy ở port 5000)
-      const response = await axios.post(
-        "http://localhost:5000/api/contact",
-        formData
-      );
+      // Gọi API POST để gửi dữ liệu xuống Backend
+      await axios.post("http://localhost:5000/api/contact", formData);
 
-      setMessage("Gửi thành công: " + response.data.message);
-      // Reset form sau khi gửi
+      setMessage("Gửi thành công!");
+
+      // Reset form về rỗng để nhập người tiếp theo
       setFormData({ fullName: "", email: "", phone: "", description: "" });
+
+      // Gọi lại hàm này để bảng cập nhật dòng mới ngay lập tức
+      fetchContacts();
     } catch (error) {
       console.error(error);
       setMessage("Có lỗi xảy ra khi gửi dữ liệu.");
     }
   };
 
+  // PHẦN GIAO DIỆN (JSX)
   return (
-    <div style={{ padding: "20px", maxWidth: "500px", margin: "auto" }}>
-      <h2>Form Liên Hệ</h2>
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: "10px" }}>
-          <label>Họ và tên (*):</label>
-          <br />
-          <input
-            type="text"
-            name="fullName"
-            value={formData.fullName}
-            onChange={handleChange}
-            style={{ width: "100%", padding: "8px" }}
-          />
-        </div>
+    <div className="container">
+      {/* FORM ĐĂNG KÝ */}
+      <div className="form-card">
+        <h2>Contact Form</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Họ và tên (*)</label>
+            <input
+              type="text"
+              name="fullName"
+              value={formData.fullName}
+              onChange={handleChange}
+              placeholder="Nhập tên của bạn..."
+            />
+          </div>
 
-        <div style={{ marginBottom: "10px" }}>
-          <label>Email (*):</label>
-          <br />
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            style={{ width: "100%", padding: "8px" }}
-          />
-        </div>
+          <div className="form-group">
+            <label>Email (*)</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="example@gmail.com"
+            />
+          </div>
 
-        <div style={{ marginBottom: "10px" }}>
-          <label>Số điện thoại (*):</label>
-          <br />
-          <input
-            type="text"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-            style={{ width: "100%", padding: "8px" }}
-          />
-        </div>
+          <div className="form-group">
+            <label>Số điện thoại (*)</label>
+            <input
+              type="text"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              placeholder="098..."
+            />
+          </div>
 
-        <div style={{ marginBottom: "10px" }}>
-          <label>Mô tả:</label>
-          <br />
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            style={{ width: "100%", padding: "8px" }}
-          />
-        </div>
+          <div className="form-group">
+            <label>Mô tả</label>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              placeholder="Nội dung chi tiết..."
+            />
+          </div>
 
-        <button
-          type="submit"
-          style={{ padding: "10px 20px", cursor: "pointer" }}
-        >
-          Gửi thông tin
-        </button>
-      </form>
+          <button type="submit" className="btn-submit">
+            Gửi Thông Tin
+          </button>
+        </form>
 
-      {/* Hiển thị thông báo */}
-      {message && <p style={{ marginTop: "10px", color: "blue" }}>{message}</p>}
+        {/* Hiển thị thông báo nếu có */}
+        {message && <p className="message">{message}</p>}
+      </div>
+
+      {/* BẢNG HIỂN THỊ DANH SÁCH */}
+      <div className="table-card">
+        <h3>Contact List</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Họ Tên</th>
+              <th>Email</th>
+              <th>SĐT</th>
+              <th>Mô tả</th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* Dùng hàm map để lặp qua danh sách và in ra từng dòng */}
+            {contactList.map((contact) => (
+              <tr key={contact._id}>
+                <td>{contact.fullName}</td>
+                <td>{contact.email}</td>
+                <td>{contact.phone}</td>
+                <td>{contact.description}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

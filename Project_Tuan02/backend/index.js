@@ -1,20 +1,20 @@
-// 1. Khai báo các thư viện
+// Khai báo các thư viện
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
 const app = express();
 
-// 2. Middleware (Cấu hình)
+// Middleware (Cấu hình)
 app.use(cors()); // Cho phép Frontend gọi API
 app.use(express.json()); // Cho phép đọc dữ liệu JSON gửi lên từ Frontend
 
-// 3. Kết nối MongoDB
+// Kết nối MongoDB
 mongoose.connect('mongodb+srv://cuongDao1605:160507@projecttuan02.8w8n109.mongodb.net/?appName=projectTuan02')
     .then(() => console.log("Đã kết nối MongoDB thành công!"))
     .catch(err => console.log("Lỗi kết nối:", err));
 
-// 4. Tạo Schema (Cấu trúc bảng dữ liệu) 
+// Tạo Schema (Cấu trúc bảng dữ liệu) 
 const ContactSchema = new mongoose.Schema({
     fullName: { type: String, required: true },
     email: { type: String, required: true },
@@ -25,7 +25,7 @@ const ContactSchema = new mongoose.Schema({
 // Tạo Model từ Schema
 const ContactModel = mongoose.model('Contact', ContactSchema);
 
-// 5. Tạo API (Điểm nhận yêu cầu từ Frontend)
+// Tạo API (Điểm nhận yêu cầu từ Frontend)
 // Method: POST, Route: /api/contact
 app.post('/api/contact', async (req, res) => {
     try {
@@ -46,7 +46,18 @@ app.post('/api/contact', async (req, res) => {
     }
 });
 
-// 6. Chạy Server
+// API: Lấy toàn bộ danh sách liên hệ (GET)
+app.get('/api/contact', async (req, res) => {
+    try {
+        // Lấy tất cả dữ liệu từ Mongo, sắp xếp cái mới nhất lên đầu
+        const contacts = await ContactModel.find().sort({ _id: -1 });
+        res.status(200).json(contacts);
+    } catch (error) {
+        res.status(500).json({ message: "Lỗi lấy dữ liệu", error });
+    }
+});
+
+// Chạy Server
 app.listen(5000, () => {
     console.log("Server đang chạy tại port 5000");
 });
