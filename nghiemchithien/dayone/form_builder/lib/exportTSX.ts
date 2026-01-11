@@ -33,41 +33,128 @@ const COMPONENT_TYPE_MAP: Record<string, string> = {
 export function generateTSX(formData: FormData): string {
   const componentName = formData.name.replace(/\s+/g, '').replace(/^./, (str) => str.toUpperCase());
 
+  // Get the Container node to find its children
+  const containerNode = Object.entries(formData.craftState || {}).find(
+    ([, node]) => node.type?.resolvedName === 'Container'
+  );
+
+  const containerChildren = containerNode ? containerNode[1].nodes || [] : [];
+
+  // Collect all fields with validation for generating validation rules
+  interface ValidationRule {
+    fieldName: string;
+    label: string;
+    pattern: string;
+    message: string;
+    isRequired: boolean;
+  }
+  const validationRules: ValidationRule[] = [];
+
   const renderComponent = (nodeId: string, node: SerializedNode): string => {
     const resolvedName = node.type.resolvedName;
     const type = COMPONENT_TYPE_MAP[resolvedName] || 'text';
     const props = node.props as any;
 
-    const wrapperStyle = `{{ position: 'absolute', left: '${props.x || 0}px', top: '${props.y || 0}px', width: '${props.width || 400}px', minHeight: '${props.height || 80}px', fontSize: '${props.fontSize || '14px'}', color: '${props.color || '#000000'}', backgroundColor: '${props.backgroundColor || '#ffffff'}', borderRadius: '${props.borderRadius || '4px'}', padding: '${props.padding || '8px'}', margin: '${props.margin || '0px'}' }}`;
+    // Generate a safe field name from nodeId
+    const fieldName = nodeId.replace(/[^a-zA-Z0-9]/g, '_');
+
+    // Collect validation rules
+    if (props.validationPattern || props.isRequired) {
+      validationRules.push({
+        fieldName,
+        label: props.label || fieldName,
+        pattern: props.validationPattern || '',
+        message: props.validationMessage || `${props.label || fieldName} không hợp lệ`,
+        isRequired: props.isRequired || false,
+      });
+    }
+
+    // Use columnWidth for flex layout instead of absolute positioning
+    const columnWidth = props.columnWidth || '100%';
+    let widthCalc = columnWidth;
+
+    // Calculate width with gap adjustment for flex layout
+    if (columnWidth === '50%') {
+      widthCalc = 'calc(50% - 6px)';
+    } else if (columnWidth === '33.33%') {
+      widthCalc = 'calc(33.33% - 8px)';
+    } else if (columnWidth === '25%') {
+      widthCalc = 'calc(25% - 9px)';
+    }
+
+    const wrapperStyle = `{{ width: '${widthCalc}', fontSize: '${props.fontSize || '14px'}', color: '${props.color || '#000000'}', backgroundColor: '${props.backgroundColor || 'transparent'}', borderRadius: '${props.borderRadius || '4px'}', padding: '${props.padding || '8px'}' }}`;
 
     let innerContent = '';
 
     switch (type) {
       case 'name_field':
-        if (props.fullName) {
+        const nameInputMode = props.nameInputMode || '1';
+        if (nameInputMode === '1') {
           innerContent = `${props.displayLabel !== false ? `<label className="block text-sm font-medium mb-1">
-              ${props.label || 'Name'}${props.isRequired ? '<span className="text-red-500">*</span>' : ''}
+              ${props.label || 'Họ và tên'}${props.isRequired ? '<span className="text-red-500">*</span>' : ''}
             </label>` : ''}
             <input
               type="text"
-              placeholder="${props.placeholder || 'Full name'}"
-              className="w-full px-3 py-2 border border-gray-300 rounded"
+              name="${fieldName}"
+              value={formData.${fieldName} || ''}
+              onChange={handleChange}
+              placeholder="${props.placeholder || 'Họ và tên'}"
+              className={\`w-full px-3 py-2 border rounded \${errors.${fieldName} ? 'border-red-500' : 'border-gray-300'}\`}
               ${props.isRequired ? 'required' : ''}
-            />`;
-        } else {
+            />
+            {errors.${fieldName} && <p className="text-red-500 text-xs mt-1">{errors.${fieldName}}</p>}`;
+        } else if (nameInputMode === '2') {
           innerContent = `${props.displayLabel !== false ? `<label className="block text-sm font-medium mb-1">
-              ${props.label || 'Name'}${props.isRequired ? '<span className="text-red-500">*</span>' : ''}
+              ${props.label || 'Họ và tên'}${props.isRequired ? '<span className="text-red-500">*</span>' : ''}
             </label>` : ''}
             <div className="grid grid-cols-2 gap-2">
               <input
                 type="text"
-                placeholder="First name"
+                name="${fieldName}_first"
+                value={formData.${fieldName}_first || ''}
+                onChange={handleChange}
+                placeholder="Họ"
                 className="px-3 py-2 border border-gray-300 rounded"
                 ${props.isRequired ? 'required' : ''}
               />
               <input
                 type="text"
-                placeholder="Last name"
+                name="${fieldName}_last"
+                value={formData.${fieldName}_last || ''}
+                onChange={handleChange}
+                placeholder="Tên"
+                className="px-3 py-2 border border-gray-300 rounded"
+                ${props.isRequired ? 'required' : ''}
+              />
+            </div>`;
+        } else {
+          innerContent = `${props.displayLabel !== false ? `<label className="block text-sm font-medium mb-1">
+              ${props.label || 'Họ và tên'}${props.isRequired ? '<span className="text-red-500">*</span>' : ''}
+            </label>` : ''}
+            <div className="grid grid-cols-3 gap-2">
+              <input
+                type="text"
+                name="${fieldName}_first"
+                value={formData.${fieldName}_first || ''}
+                onChange={handleChange}
+                placeholder="Họ"
+                className="px-3 py-2 border border-gray-300 rounded"
+                ${props.isRequired ? 'required' : ''}
+              />
+              <input
+                type="text"
+                name="${fieldName}_middle"
+                value={formData.${fieldName}_middle || ''}
+                onChange={handleChange}
+                placeholder="Tên đệm"
+                className="px-3 py-2 border border-gray-300 rounded"
+              />
+              <input
+                type="text"
+                name="${fieldName}_last"
+                value={formData.${fieldName}_last || ''}
+                onChange={handleChange}
+                placeholder="Tên"
                 className="px-3 py-2 border border-gray-300 rounded"
                 ${props.isRequired ? 'required' : ''}
               />
@@ -86,10 +173,14 @@ export function generateTSX(formData: FormData): string {
             </label>
             <input
               type="${type === 'email' ? 'email' : type === 'password' ? 'password' : type === 'phone' ? 'tel' : 'text'}"
+              name="${fieldName}"
+              value={formData.${fieldName} || ''}
+              onChange={handleChange}
               placeholder="${props.placeholder || ''}"
-              className="w-full px-3 py-2 border border-gray-300 rounded"
+              className={\`w-full px-3 py-2 border rounded \${errors.${fieldName} ? 'border-red-500' : 'border-gray-300'}\`}
               ${props.isRequired ? 'required' : ''}
-            />`;
+            />
+            {errors.${fieldName} && <p className="text-red-500 text-xs mt-1">{errors.${fieldName}}</p>}`;
         break;
 
       case 'country':
@@ -97,9 +188,16 @@ export function generateTSX(formData: FormData): string {
         innerContent = `<label className="block text-sm font-medium mb-1">
               ${props.label || 'Select'}${props.isRequired ? '<span className="text-red-500">*</span>' : ''}
             </label>
-            <select className="w-full px-3 py-2 border border-gray-300 rounded" ${props.isRequired ? 'required' : ''}>
+            <select
+              name="${fieldName}"
+              value={formData.${fieldName} || ''}
+              onChange={handleChange}
+              className={\`w-full px-3 py-2 border rounded \${errors.${fieldName} ? 'border-red-500' : 'border-gray-300'}\`}
+              ${props.isRequired ? 'required' : ''}
+            >
               <option value="">${props.placeholder || 'Select...'}</option>
-            </select>`;
+            </select>
+            {errors.${fieldName} && <p className="text-red-500 text-xs mt-1">{errors.${fieldName}}</p>}`;
         break;
 
       case 'textarea':
@@ -107,59 +205,73 @@ export function generateTSX(formData: FormData): string {
               ${props.label || 'Text Area'}${props.isRequired ? '<span className="text-red-500">*</span>' : ''}
             </label>
             <textarea
+              name="${fieldName}"
+              value={formData.${fieldName} || ''}
+              onChange={handleChange}
               placeholder="${props.placeholder || ''}"
-              className="w-full px-3 py-2 border border-gray-300 rounded"
-              rows={4}
+              className={\`w-full px-3 py-2 border rounded \${errors.${fieldName} ? 'border-red-500' : 'border-gray-300'}\`}
+              rows={${props.rows || 4}}
               ${props.isRequired ? 'required' : ''}
-            />`;
+            />
+            {errors.${fieldName} && <p className="text-red-500 text-xs mt-1">{errors.${fieldName}}</p>}`;
         break;
 
       case 'checkbox':
+        const checkboxOptions = Array.isArray(props.options) ? props.options : [];
         innerContent = `<label className="block text-sm font-medium mb-2">
               ${props.label || 'Checkbox'}${props.isRequired ? '<span className="text-red-500">*</span>' : ''}
             </label>
             <div className="space-y-2">
-              ${props.options?.map((opt: any) => `
+              ${checkboxOptions.map((opt: string) => `
               <label className="flex items-center gap-2">
-                <input type="checkbox" value="${opt.value}" className="rounded" />
-                <span className="text-sm">${opt.label}</span>
-              </label>`).join('') || ''}
+                <input type="checkbox" name="${fieldName}" value="${opt}" onChange={handleCheckboxChange} className="rounded" />
+                <span className="text-sm">${opt}</span>
+              </label>`).join('')}
             </div>`;
         break;
 
       case 'radio':
+        const radioOptions = Array.isArray(props.options) ? props.options : [];
         innerContent = `<label className="block text-sm font-medium mb-2">
               ${props.label || 'Radio'}${props.isRequired ? '<span className="text-red-500">*</span>' : ''}
             </label>
             <div className="space-y-2">
-              ${props.options?.map((opt: any) => `
+              ${radioOptions.map((opt: string) => `
               <label className="flex items-center gap-2">
-                <input type="radio" name="${nodeId}" value="${opt.value}" ${props.isRequired ? 'required' : ''} />
-                <span className="text-sm">${opt.label}</span>
-              </label>`).join('') || ''}
+                <input type="radio" name="${fieldName}" value="${opt}" onChange={handleChange} ${props.isRequired ? 'required' : ''} />
+                <span className="text-sm">${opt}</span>
+              </label>`).join('')}
             </div>`;
         break;
 
       case 'select':
+        const selectOptions = Array.isArray(props.options) ? props.options : [];
         innerContent = `<label className="block text-sm font-medium mb-1">
               ${props.label || 'Select'}${props.isRequired ? '<span className="text-red-500">*</span>' : ''}
             </label>
-            <select className="w-full px-3 py-2 border border-gray-300 rounded" ${props.isRequired ? 'required' : ''}>
-              <option value="">${props.placeholder || 'Select...'}</option>
-              ${props.options?.map((opt: any) => `
-              <option value="${opt.value}">${opt.label}</option>`).join('') || ''}
-            </select>`;
+            <select
+              name="${fieldName}"
+              value={formData.${fieldName} || ''}
+              onChange={handleChange}
+              className={\`w-full px-3 py-2 border rounded \${errors.${fieldName} ? 'border-red-500' : 'border-gray-300'}\`}
+              ${props.isRequired ? 'required' : ''}
+            >
+              <option value="">${props.placeholder || 'Chọn...'}</option>
+              ${selectOptions.map((opt: string) => `
+              <option value="${opt}">${opt}</option>`).join('')}
+            </select>
+            {errors.${fieldName} && <p className="text-red-500 text-xs mt-1">{errors.${fieldName}}</p>}`;
         break;
 
       case 'button':
-        innerContent = `<button type="submit" className="px-6 py-2 font-medium rounded hover:opacity-90 flex items-center justify-center" style={{ backgroundColor: '${props.backgroundColor || '#3b82f6'}', color: '${props.color || '#ffffff'}' }}>
-            ${props.label || 'Submit'}
+        innerContent = `<button type="submit" className="w-full px-6 py-2 font-medium rounded hover:opacity-90" style={{ backgroundColor: '${props.buttonColor || '#3b82f6'}', color: '${props.textColor || '#ffffff'}' }}>
+            ${props.buttonText || 'Submit'}
           </button>`;
         break;
 
       case 'switch':
         innerContent = `<label className="flex items-center gap-2">
-              <input type="checkbox" className="toggle" />
+              <input type="checkbox" name="${fieldName}" onChange={handleChange} className="toggle" />
               <span className="text-sm font-medium">${props.label || 'Toggle'}${props.isRequired ? '<span className="text-red-500">*</span>' : ''}</span>
             </label>`;
         break;
@@ -174,41 +286,121 @@ export function generateTSX(formData: FormData): string {
           </div>`;
   };
 
-  // Extract components from Craft.js state (excluding Container and ROOT)
-  const componentsCode = Object.entries(formData.craftState || {})
-    .filter(([nodeId, node]) => {
-      const resolvedName = node.type?.resolvedName;
-      return resolvedName && resolvedName !== 'Container' && nodeId !== 'ROOT';
-    })
-    .map(([nodeId, node]) => renderComponent(nodeId, node))
-    .join('\n');
+  // Extract components from Container's children in order
+  let componentsCode = '';
+
+  if (containerChildren.length > 0) {
+    // Use Container's nodes array to maintain order
+    componentsCode = containerChildren
+      .filter((nodeId: string) => {
+        const node = formData.craftState[nodeId];
+        return node && node.type?.resolvedName !== 'Container';
+      })
+      .map((nodeId: string) => renderComponent(nodeId, formData.craftState[nodeId]))
+      .join('\n');
+  } else {
+    // Fallback: extract all non-Container nodes
+    componentsCode = Object.entries(formData.craftState || {})
+      .filter(([nodeId, node]) => {
+        const resolvedName = node.type?.resolvedName;
+        return resolvedName && resolvedName !== 'Container' && nodeId !== 'ROOT';
+      })
+      .map(([nodeId, node]) => renderComponent(nodeId, node))
+      .join('\n');
+  }
+
+  // Generate validation rules code
+  const validationRulesCode = validationRules.map(rule => {
+    const checks: string[] = [];
+
+    if (rule.isRequired) {
+      checks.push(`    if (!formData.${rule.fieldName}) {
+      newErrors.${rule.fieldName} = '${rule.label} là bắt buộc';
+      isValid = false;
+    }`);
+    }
+
+    if (rule.pattern) {
+      checks.push(`    if (formData.${rule.fieldName} && !/${rule.pattern.replace(/\\/g, '\\\\')}/g.test(formData.${rule.fieldName})) {
+      newErrors.${rule.fieldName} = '${rule.message}';
+      isValid = false;
+    }`);
+    }
+
+    return checks.join(' else ');
+  }).join('\n');
 
   return `'use client';
 
 import React, { useState } from 'react';
 
+interface FormDataType {
+  [key: string]: string | string[];
+}
+
+interface ErrorsType {
+  [key: string]: string;
+}
+
 export default function ${componentName}() {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState<FormDataType>({});
+  const [errors, setErrors] = useState<ErrorsType>({});
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+  };
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, checked } = e.target;
+    setFormData(prev => {
+      const current = (prev[name] as string[]) || [];
+      if (checked) {
+        return { ...prev, [name]: [...current, value] };
+      } else {
+        return { ...prev, [name]: current.filter(v => v !== value) };
+      }
+    });
+  };
+
+  const validateForm = (): boolean => {
+    const newErrors: ErrorsType = {};
+    let isValid = true;
+
+${validationRulesCode}
+
+    setErrors(newErrors);
+    return isValid;
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    // Add your form submission logic here
+    
+    if (validateForm()) {
+      console.log('Form submitted:', formData);
+      // Add your form submission logic here
+      alert('Form submitted successfully!');
+    }
   };
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div 
-        className="mx-auto bg-white shadow-lg p-8"
+        className="mx-auto bg-white shadow-lg rounded-lg p-8"
         style={{ 
           width: '${formData.canvasConfig.width}',
-          height: '${formData.canvasConfig.height || '600px'}',
-          backgroundColor: '${formData.canvasConfig.backgroundColor}',
-          position: 'relative'
+          minHeight: '${formData.canvasConfig.height || '600px'}',
+          backgroundColor: '${formData.canvasConfig.backgroundColor}'
         }}
       >
-        <form onSubmit={handleSubmit}>
-          ${componentsCode}
+        <form onSubmit={handleSubmit} noValidate>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'flex-start' }}>
+            ${componentsCode}
+          </div>
         </form>
       </div>
     </div>
