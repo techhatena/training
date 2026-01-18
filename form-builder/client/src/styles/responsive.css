@@ -1,0 +1,140 @@
+/**
+ * GIẢI THÍCH RESPONSIVE DESIGN:
+ * - Mobile first approach
+ * - Breakpoints:
+ *   - sm: 640px (tablet nhỏ)
+ *   - md: 768px (tablet)
+ *   - lg: 1024px (desktop nhỏ)
+ *   - xl: 1280px (desktop lớn)
+ * - Flexbox và Grid để responsive
+ */
+
+/* Builder layout responsive */
+.builder-container {
+  @apply min-h-screen bg-gray-50 flex flex-col;
+}
+
+/* Header responsive */
+.builder-header {
+  @apply flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 sm:px-6 sm:py-4 border-b bg-white;
+}
+
+.builder-header-buttons {
+  @apply flex flex-wrap gap-2 w-full sm:w-auto;
+}
+
+.builder-header-input {
+  @apply w-full sm:max-w-sm text-base sm:text-lg;
+}
+
+/* Main content layout */
+.builder-main {
+  @apply flex-1 grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-0 overflow-hidden;
+}
+
+/* Sidebar responsive */
+.builder-sidebar {
+  @apply col-span-1 border-r bg-white overflow-y-auto max-h-screen;
+  @apply max-h-40 sm:max-h-screen;
+}
+
+/* Canvas responsive */
+.builder-canvas {
+  @apply col-span-1 sm:col-span-2 md:col-span-2 bg-gray-100 overflow-auto;
+}
+
+/* Settings panel responsive */
+.builder-settings {
+  @apply col-span-1 border-l bg-white overflow-y-auto;
+  @apply max-h-40 sm:max-h-screen;
+}
+
+/* Form grid responsive */
+.form-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4;
+}
+
+/* Button responsive */
+.button-responsive {
+  @apply px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm;
+}
+
+/* Modal responsive */
+.modal-responsive {
+  @apply fixed inset-0 z-50 flex items-center justify-center p-4;
+}
+
+.modal-content-responsive {
+  @apply bg-white rounded-lg max-w-full sm:max-w-md md:max-w-lg lg:max-w-2xl w-full;
+}
+
+/* Input responsive */
+.input-responsive {
+  @apply w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base;
+}
+
+/* Card responsive */
+.card-responsive {
+  @apply p-3 sm:p-4 md:p-6 rounded-lg;
+}
+
+/* Navigation responsive */
+.nav-responsive {
+  @apply flex flex-col sm:flex-row gap-2 sm:gap-4;
+}
+
+/* Text responsive */
+.text-responsive-h1 {
+  @apply text-2xl sm:text-3xl md:text-4xl font-bold;
+}
+
+.text-responsive-h2 {
+  @apply text-xl sm:text-2xl md:text-3xl font-bold;
+}
+
+.text-responsive-body {
+  @apply text-sm sm:text-base md:text-lg;
+}
+
+/* Toolbar responsive */
+.toolbar-responsive {
+  @apply flex flex-wrap sm:flex-nowrap gap-1 sm:gap-2;
+}
+
+/* Element container responsive */
+.element-container {
+  @apply w-full p-2 sm:p-3 md:p-4 my-2 sm:my-3 border rounded;
+}
+
+/* Hide on mobile */
+@media (max-width: 640px) {
+  .hide-mobile {
+    @apply hidden;
+  }
+
+  .builder-sidebar {
+    @apply flex flex-row overflow-x-auto max-h-20;
+  }
+
+  .builder-settings {
+    @apply flex flex-row overflow-x-auto max-h-20;
+  }
+}
+
+/* Show on mobile only */
+@media (max-width: 640px) {
+  .show-mobile {
+    @apply block;
+  }
+}
+
+/* Desktop optimizations */
+@media (min-width: 1024px) {
+  .builder-sidebar {
+    @apply min-w-64;
+  }
+
+  .builder-settings {
+    @apply min-w-80;
+  }
+}

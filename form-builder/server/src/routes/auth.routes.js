@@ -1,0 +1,11 @@
+const express = require("express");
+const route = express.Router();
+const authController = require("../controllers/auth.controller");
+route.post("/register", authController.register);
+route.post("/login", authController.login);
+route.post("/resend-verify", authController.resendVerify);
+route.post("/forgot-password", authController.forgotPassword);
+route.get("/verify-reset-token/:token", authController.verifyResetToken);
+route.post("/reset-password/:token", authController.resetPassword);
+route.get("/verify/:token", authController.verifyToken);
+module.exports = route;
