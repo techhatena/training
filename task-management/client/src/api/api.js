@@ -1,6 +1,19 @@
 import axios from "axios";
+
+const getApiBaseUrl = () => {
+  // Production (Vercel)
+  if (
+    typeof window !== "undefined" &&
+    window.location.origin.includes("vercel.app")
+  ) {
+    return "https://demo-taskmanager.onrender.com/tasks";
+  }
+  // Development
+  return import.meta.env.VITE_API_URL || "http://localhost:3000/tasks";
+};
+
 const api = axios.create({
-  baseURL: "http://localhost:3000/tasks",
+  baseURL: getApiBaseUrl(),
 });
 export const getTasks = async () => {
   const data = await api.get("/hien-thi");
